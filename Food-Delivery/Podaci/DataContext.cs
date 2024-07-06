@@ -1,7 +1,7 @@
-﻿using Food_Delivery.Entiteti;
+﻿using DostavaHrane.Entiteti;
 using Microsoft.EntityFrameworkCore;
 
-namespace Food_Delivery.Data
+namespace DostavaHrane.Data
 {
     public class DataContext : DbContext
     {

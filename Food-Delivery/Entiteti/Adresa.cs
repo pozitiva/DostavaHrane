@@ -1,4 +1,5 @@
-﻿namespace Food_Delivery.Entiteti
+﻿namespace DostavaHrane.Entiteti
+
 {
     public class Adresa
     {
