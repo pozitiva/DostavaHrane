@@ -1,6 +1,5 @@
 ﻿using DostavaHrane.Entiteti;
-using DostavaHrane.Interfejsi;
-using Microsoft.AspNetCore.Components;
+using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -11,9 +10,9 @@ namespace Food_Delivery.Kontroleri
     [ApiController]
     public class AdresaKontroler :ControllerBase
     {
-        private readonly IAdresaRepository _adresaRepository;
+        private readonly IAdresaRepozitorijum _adresaRepository;
 
-        public AdresaKontroler(IAdresaRepository adresaRepository)
+        public AdresaKontroler(IAdresaRepozitorijum adresaRepository)
         {
             _adresaRepository = adresaRepository;
         }
@@ -22,6 +21,7 @@ namespace Food_Delivery.Kontroleri
         public async Task<ActionResult<IEnumerable<Adresa>>> GetAdrese()
         {
             var adrese = await _adresaRepository.GetAllAsync();
+            //obradi ove podatke
             return Ok(adrese);
         }
 

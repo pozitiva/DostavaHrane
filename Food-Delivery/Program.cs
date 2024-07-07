@@ -1,6 +1,9 @@
 using DostavaHrane.Data;
-using DostavaHrane.Interfejsi;
+using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum;
+using DostavaHrane.Repozitorijum.Interfejsi;
+using DostavaHrane.Servisi.Interfejsi;
+using Food_Delivery.Servisi;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddScoped<IAdresaRepository, AdresaRepository>();
+builder.Services.AddScoped<IAdresaRepozitorijum, AdresaRepozitorijum>();
+builder.Services.AddScoped<IMusterijaRepozitorijum, Musterijarepozitorijum>();
+//builder.Services.AddScoped<IRepository<Musterija>, MusterijaRepozitorijum>();
+builder.Services.AddScoped<IMusterijaServis, MusterijaServis>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>

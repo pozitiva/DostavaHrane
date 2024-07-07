@@ -1,16 +1,16 @@
 ﻿using DostavaHrane.Data;
 using DostavaHrane.Entiteti;
-using DostavaHrane.Interfejsi;
+using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Repozitorijum
 {
-    public class AdresaRepository:IAdresaRepository
+    public class AdresaRepozitorijum:IAdresaRepozitorijum
     {
 
         private readonly DataContext _context;
 
-        public AdresaRepository(DataContext context)
+        public AdresaRepozitorijum(DataContext context)
         {
             _context = context;
 

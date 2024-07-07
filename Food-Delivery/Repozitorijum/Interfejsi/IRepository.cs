@@ -1,4 +1,4 @@
-﻿namespace DostavaHrane.Interfejsi
+﻿namespace DostavaHrane.Repozitorijum.Interfejsi
 {
     public interface IRepository<T> where T : class
     {
