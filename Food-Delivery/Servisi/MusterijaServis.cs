@@ -2,13 +2,12 @@
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
-using Food_Delivery.Entiteti;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
 
-namespace Food_Delivery.Servisi
+namespace DostavaHrane.Servisi
 {
     public class MusterijaServis : IMusterijaServis
     {
@@ -40,13 +39,17 @@ namespace Food_Delivery.Servisi
             throw new NotImplementedException();
         }
 
-        public Task<Musterija> VratiSveMusterijePoIdAsync()
+        public Task<Musterija> VratiMusterijuPoIdAsync()
         {
             throw new NotImplementedException();
         }
 
         public async Task<string> RegistrujMusterijuAsync(RegistracijaZahtev zahtev)
         {
+            if (string.IsNullOrEmpty(zahtev.Email) || string.IsNullOrEmpty(zahtev.Sifra))
+            {
+                return null;
+            }
             if (await _musterijaRepozitorijum.ProveraEmailaAsync(zahtev.Email))
             {
                 return "Nalog sa ovim emailom vec postoji!";
@@ -70,7 +73,7 @@ namespace Food_Delivery.Servisi
             };
 
 
-            await _musterijaRepozitorijum.AddAsync(musterija);
+            await _musterijaRepozitorijum.DodajAsync(musterija);
             return "Uspesna registracija";
         }
 
@@ -89,36 +92,16 @@ namespace Food_Delivery.Servisi
             }
         }
 
-        public async Task<RezultatServisa<Musterija>> UlogujMusterijuAsync(LoginZahtev zahtev)
+        public async Task<Musterija> UlogujMusterijuAsync(LoginZahtev zahtev)
         {
             Musterija musterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(zahtev);
 
-            if (musterija == null)
-            {
-                return new RezultatServisa<Musterija>
-                {
-                    Uspesno = false,
-                    PorukaGreske = "Korisnik nije pronadjen",
-                    StatusniKod = 404
-                };
-            }
-
             if (!VerifyPasswordHash(zahtev.Sifra, musterija.SifraHash, musterija.SifraSalt))
             {
-                return new RezultatServisa<Musterija>
-                {
-                    Uspesno = false,
-                    PorukaGreske = "Netacno unet email ili sifra",
-                    StatusniKod = 401
-                };
+                return null;
             }
 
-            return new RezultatServisa<Musterija>
-            {
-                Objekat = musterija,
-                Uspesno = true,
-                StatusniKod = 200
-            };
+            return musterija;
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)

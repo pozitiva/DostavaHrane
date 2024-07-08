@@ -3,10 +3,10 @@ using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
-namespace Food_Delivery.Kontroleri
+namespace DostavaHrane.Kontroleri
 {
 
-    [Route("api/[controller]")]
+    [Route("api/adresa")]
     [ApiController]
     public class AdresaKontroler :ControllerBase
     {
@@ -20,7 +20,7 @@ namespace Food_Delivery.Kontroleri
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Adresa>>> GetAdrese()
         {
-            var adrese = await _adresaRepository.GetAllAsync();
+            var adrese = await _adresaRepository.VratiSveAsync();
             //obradi ove podatke
             return Ok(adrese);
         }

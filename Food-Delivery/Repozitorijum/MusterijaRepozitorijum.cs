@@ -1,37 +1,35 @@
-﻿using Azure.Core;
-using DostavaHrane.Data;
+﻿using DostavaHrane.Data;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
-using Food_Delivery.Entiteti;
 using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Repozitorijum
 {
-    public class Musterijarepozitorijum : IMusterijaRepozitorijum
+    public class MusterijaRepozitorijum : IMusterijaRepozitorijum
     {
         private readonly DataContext _context;
 
-        public Musterijarepozitorijum(DataContext context)
+        public MusterijaRepozitorijum(DataContext context)
         {
             _context = context;
         }
-        public async Task AddAsync(Musterija musterija)
+        public async Task DodajAsync(Musterija musterija)
         {
             _context.Musterije.Add(musterija);
             await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public Task ObrisiAsync(Musterija musterija)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Musterija>> GetAllAsync()
+        public Task<IEnumerable<Musterija>> VratiSveAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Musterija> GetByIdAsync(int id)
+        public Task<Musterija> VratiPoIdAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -41,7 +39,7 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Musterije.AnyAsync(m => m.Email == email);
         }
 
-        public Task UpdateAsync(Musterija entity)
+        public Task IzmeniAsync(Musterija entity)
         {
             throw new NotImplementedException();
         }

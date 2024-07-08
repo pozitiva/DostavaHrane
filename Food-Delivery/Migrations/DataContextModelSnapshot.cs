@@ -211,9 +211,6 @@ namespace Food_Delivery.Migrations
                     b.Property<string>("VerifikacioniToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Verifikovano")
-                        .HasColumnType("datetime2");
-
                     b.ToTable("Musterije", (string)null);
                 });
 
@@ -222,7 +219,6 @@ namespace Food_Delivery.Migrations
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
 
                     b.Property<string>("RadnoVreme")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Restorani", (string)null);
@@ -250,7 +246,7 @@ namespace Food_Delivery.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Jelo", b =>
                 {
                     b.HasOne("DostavaHrane.Entiteti.Restoran", "Restoran")
-                        .WithMany()
+                        .WithMany("Jela")
                         .HasForeignKey("RestoranId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -340,6 +336,11 @@ namespace Food_Delivery.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.Navigation("AdreseMusterija");
+                });
+
+            modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>
+                {
+                    b.Navigation("Jela");
                 });
 #pragma warning restore 612, 618
         }

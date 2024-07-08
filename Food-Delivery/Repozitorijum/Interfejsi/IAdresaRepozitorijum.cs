@@ -3,7 +3,7 @@ using DostavaHrane.Repozitorijum.Interfejsi;
 
 namespace DostavaHrane.Repozitorijum.Interfejsi
 {
-    public interface IAdresaRepozitorijum : IRepository<Adresa>
+    public interface IAdresaRepozitorijum : IRepozitorijum<Adresa>
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Food_Delivery.Entiteti
+namespace DostavaHrane.Entiteti
 {
     public class LoginZahtev
     {

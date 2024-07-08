@@ -16,30 +16,29 @@ namespace DostavaHrane.Repozitorijum
 
         }
 
-        public async Task AddAsync(Adresa entity)
+        public async Task DodajAsync(Adresa entity)
         {
             await _context.Adrese.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task ObrisiAsync(Adresa adresa)
         {
-            var entity = await _context.Adrese.FindAsync(id);
-            _context.Adrese.Remove(entity);
+            _context.Adrese.Remove(adresa);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Adresa>> GetAllAsync()
+        public async Task<IEnumerable<Adresa>> VratiSveAsync()
         {
             return await _context.Adrese.ToListAsync();
         }
 
-        public async Task<Adresa> GetByIdAsync(int id)
+        public async Task<Adresa> VratiPoIdAsync(int id)
         {
             return await _context.Adrese.FindAsync(id);
         }
 
-        public async Task UpdateAsync(Adresa entity)
+        public async Task IzmeniAsync(Adresa entity)
         {
             _context.Adrese.Update(entity);
             await _context.SaveChangesAsync();

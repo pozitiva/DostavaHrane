@@ -26,6 +26,8 @@ namespace DostavaHrane.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             modelBuilder.Entity<Korisnik>()
                 .ToTable("Korisnici");
 
@@ -49,21 +51,6 @@ namespace DostavaHrane.Data
                 .HasOne(a => a.Adresa)
                 .WithMany(am => am.AdreseMusterija)
                 .HasForeignKey(a => a.AdresaId);
-
-            //modelBuilder.Entity<StavkaNarudzbine>()
-            //    .HasKey(e => new { e.JeloId, e.NarudzbinaId });
-
-            //modelBuilder.Entity<StavkaNarudzbine>()
-            //    .HasOne(sn => sn.Narudzbina)
-            //    .WithMany(p => p.StavkeNarudzbine)
-            //    .HasForeignKey(sn => sn.NarudzbinaId);
-            ////.OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<StavkaNarudzbine>()
-            //    .HasOne(sn => sn.Jelo)
-            //    .WithMany(j => j.StavkeNarudzbine)
-            //    .HasForeignKey(sn => sn.JeloId);
-            //    //.OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Narudzbina>(entity =>
             {
@@ -101,17 +88,28 @@ namespace DostavaHrane.Data
                 entity.Property(e => e.Cena).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.TipJela).HasMaxLength(50).IsRequired();
 
-                entity.HasOne(e => e.Restoran)
-                    .WithMany()
-                    .HasForeignKey("RestoranId");
-                //.OnDelete(DeleteBehavior.Restrict);
-
-
                 entity.HasMany(e => e.StavkeNarudzbine)
                     .WithOne(e => e.Jelo)
                     .HasForeignKey(e => e.JeloId);
-                    //.OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasOne(s => s.Restoran)
+                .WithMany(u => u.Jela)
+                .HasForeignKey(s => s.RestoranId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<StavkaNarudzbine>(entity =>
+            {
+                entity.HasKey(e => new { e.JeloId, e.NarudzbinaId });
+
+                entity.HasOne(e => e.Jelo)
+                    .WithMany(j => j.StavkeNarudzbine)
+                    .HasForeignKey(e => e.JeloId);
+
+                entity.HasOne(e => e.Narudzbina)
+                    .WithMany(n => n.StavkeNarudzbine)
+                    .HasForeignKey(e => e.NarudzbinaId);
             });
 
             // Configure StavkaNarudzbine entity
@@ -133,6 +131,7 @@ namespace DostavaHrane.Data
                     //.OnDelete(DeleteBehavior.Restrict);
 
             });
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using DostavaHrane.Data;
 using System.Security.Cryptography;
 using System.Text;
-using Food_Delivery.Entiteti;
-using Food_Delivery.Servisi;
+using DostavaHrane.Entiteti;
+using DostavaHrane.Servisi;
 
 namespace DostavaHrane.Kontroleri
 {
-    [Route("api/[controller]")]
+    [Route("api/musterija")]
     [ApiController]
     public class MusterijaKontroler : ControllerBase 
     {
@@ -50,27 +50,17 @@ namespace DostavaHrane.Kontroleri
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginZahtev zahtev)
         {
-            if (string.IsNullOrEmpty(zahtev.Email) || string.IsNullOrEmpty(zahtev.Sifra))
-            {
-                return BadRequest(new { message = "Email i sifra su obavezna polja!" });
-            }
+
 
             var rezultat = await _musterijaServis.UlogujMusterijuAsync(zahtev);
 
-            if (!rezultat.Uspesno)
+            if(rezultat== null)
             {
-                switch (rezultat.StatusniKod)
-                {
-                    case 401:
-                        return Unauthorized(new { message = rezultat.PorukaGreske });
-                    case 404:
-                        return NotFound(new { message = rezultat.PorukaGreske });
-                    default:
-                        return StatusCode(rezultat.StatusniKod, new { message = rezultat.PorukaGreske });
-                }
+                return BadRequest("Neuspesno logovanje");
             }
+           
 
-            return Ok(new { message = "Uspesno ste ulogovani", user = rezultat.Objekat });
+            return Ok("Korisnik je uspesno ulogovan");
 
         }
     }

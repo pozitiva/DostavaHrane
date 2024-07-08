@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Food_Delivery.Migrations
+namespace DostavaHrane.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

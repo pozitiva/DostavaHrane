@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DostavaHrane.Migrations
+namespace Food_Delivery.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240706173802_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240708164753_Mig10")]
+    partial class Mig10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,7 +129,6 @@ namespace DostavaHrane.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Ime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -204,6 +203,17 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("SifraHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("SifraSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("VerifikacioniToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.ToTable("Musterije", (string)null);
                 });
 
@@ -212,7 +222,6 @@ namespace DostavaHrane.Migrations
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
 
                     b.Property<string>("RadnoVreme")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Restorani", (string)null);
@@ -240,7 +249,7 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Jelo", b =>
                 {
                     b.HasOne("DostavaHrane.Entiteti.Restoran", "Restoran")
-                        .WithMany()
+                        .WithMany("Jela")
                         .HasForeignKey("RestoranId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -277,7 +286,7 @@ namespace DostavaHrane.Migrations
 
             modelBuilder.Entity("DostavaHrane.Entiteti.StavkaNarudzbine", b =>
                 {
-                    b.HasOne("DostavaHraneEntiteti.Jelo", "Jelo")
+                    b.HasOne("DostavaHrane.Entiteti.Jelo", "Jelo")
                         .WithMany("StavkeNarudzbine")
                         .HasForeignKey("JeloId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -305,31 +314,36 @@ namespace DostavaHrane.Migrations
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>
                 {
-                    b.HasOne("Food_Delivery.Entiteti.Korisnik", null)
+                    b.HasOne("DostavaHrane.Entiteti.Korisnik", null)
                         .WithOne()
-                        .HasForeignKey("Food_Delivery.Entiteti.Restoran", "Id")
+                        .HasForeignKey("DostavaHrane.Entiteti.Restoran", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Food_Delivery.Entiteti.Adresa", b =>
+            modelBuilder.Entity("DostavaHrane.Entiteti.Adresa", b =>
                 {
                     b.Navigation("AdreseMusterija");
                 });
 
-            modelBuilder.Entity("Food_Delivery.Entiteti.Jelo", b =>
+            modelBuilder.Entity("DostavaHrane.Entiteti.Jelo", b =>
                 {
                     b.Navigation("StavkeNarudzbine");
                 });
 
-            modelBuilder.Entity("Food_Delivery.Entiteti.Narudzbina", b =>
+            modelBuilder.Entity("DostavaHrane.Entiteti.Narudzbina", b =>
                 {
                     b.Navigation("StavkeNarudzbine");
                 });
 
-            modelBuilder.Entity("Food_Delivery.Entiteti.Musterija", b =>
+            modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.Navigation("AdreseMusterija");
+                });
+
+            modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>
+                {
+                    b.Navigation("Jela");
                 });
 #pragma warning restore 612, 618
         }

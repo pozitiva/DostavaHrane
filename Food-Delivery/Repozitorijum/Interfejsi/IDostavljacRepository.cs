@@ -3,7 +3,7 @@ using DostavaHrane.Repozitorijum.Interfejsi;
 
 namespace DostavaHrane.Repozitorijum.Interfejsi
 {
-    public interface IDostavljacRepository : IRepository<Dostavljac>
+    public interface IDostavljacRepository : IRepozitorijum<Dostavljac>
     {
     }
 }
