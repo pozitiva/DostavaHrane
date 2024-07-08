@@ -2,6 +2,8 @@
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
+using Food_Delivery.Entiteti;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
@@ -77,14 +79,61 @@ namespace Food_Delivery.Servisi
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
 
-        private void KreirajSifraHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private void KreirajSifraHash(string sifra, out byte[] sifraHash, out byte[] sifraSalt)
         {
             using (var hmac = new HMACSHA512())
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac
-                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                sifraSalt = hmac.Key;
+                sifraHash = hmac
+                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(sifra));
             }
+        }
+
+        public async Task<RezultatServisa<Musterija>> UlogujMusterijuAsync(LoginZahtev zahtev)
+        {
+            Musterija musterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(zahtev);
+
+            if (musterija == null)
+            {
+                return new RezultatServisa<Musterija>
+                {
+                    Uspesno = false,
+                    PorukaGreske = "Korisnik nije pronadjen",
+                    StatusniKod = 404
+                };
+            }
+
+            if (!VerifyPasswordHash(zahtev.Sifra, musterija.SifraHash, musterija.SifraSalt))
+            {
+                return new RezultatServisa<Musterija>
+                {
+                    Uspesno = false,
+                    PorukaGreske = "Netacno unet email ili sifra",
+                    StatusniKod = 401
+                };
+            }
+
+            return new RezultatServisa<Musterija>
+            {
+                Objekat = musterija,
+                Uspesno = true,
+                StatusniKod = 200
+            };
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac
+                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
+        }
+
+        System.Threading.Tasks.Task IMusterijaServis.ObrisiMusterijuAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

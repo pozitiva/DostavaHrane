@@ -2,6 +2,7 @@
 using DostavaHrane.Data;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
+using Food_Delivery.Entiteti;
 using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Repozitorijum
@@ -43,6 +44,11 @@ namespace DostavaHrane.Repozitorijum
         public Task UpdateAsync(Musterija entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Musterija> VratiMusterijuSaEmailom(LoginZahtev zahtev)
+        {
+            return await _context.Musterije.FirstOrDefaultAsync(u => u.Email == zahtev.Email);
         }
     }
 }

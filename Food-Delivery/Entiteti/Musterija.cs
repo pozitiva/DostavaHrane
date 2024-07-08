@@ -7,7 +7,6 @@
         public byte[] SifraHash { get; set; } = new byte[32];
         public byte[] SifraSalt { get; set ;} = new byte[32];
         public string? VerifikacioniToken { get; set; }
-        public DateTime? Verifikovano { get; set; }
 
         public ICollection<AdresaMusterije> AdreseMusterija { get; set; }
     }
