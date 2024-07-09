@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Food_Delivery.Migrations
+namespace DostavaHrane.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -34,6 +34,9 @@ namespace Food_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MusterijaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Naziv")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -44,22 +47,9 @@ namespace Food_Delivery.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MusterijaId");
+
                     b.ToTable("Adrese");
-                });
-
-            modelBuilder.Entity("DostavaHrane.Entiteti.AdresaMusterije", b =>
-                {
-                    b.Property<int>("MusterijaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AdresaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MusterijaId", "AdresaId");
-
-                    b.HasIndex("AdresaId");
-
-                    b.ToTable("AdreseMusterija");
                 });
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Dostavljac", b =>
@@ -157,8 +147,7 @@ namespace Food_Delivery.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("UkupnaCena")
                         .HasColumnType("decimal(18,2)");
@@ -224,21 +213,13 @@ namespace Food_Delivery.Migrations
                     b.ToTable("Restorani", (string)null);
                 });
 
-            modelBuilder.Entity("DostavaHrane.Entiteti.AdresaMusterije", b =>
+            modelBuilder.Entity("DostavaHrane.Entiteti.Adresa", b =>
                 {
-                    b.HasOne("DostavaHrane.Entiteti.Adresa", "Adresa")
-                        .WithMany("AdreseMusterija")
-                        .HasForeignKey("AdresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DostavaHrane.Entiteti.Musterija", "Musterija")
-                        .WithMany("AdreseMusterija")
+                        .WithMany("Adrese")
                         .HasForeignKey("MusterijaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Adresa");
 
                     b.Navigation("Musterija");
                 });
@@ -248,7 +229,7 @@ namespace Food_Delivery.Migrations
                     b.HasOne("DostavaHrane.Entiteti.Restoran", "Restoran")
                         .WithMany("Jela")
                         .HasForeignKey("RestoranId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Restoran");
@@ -257,19 +238,19 @@ namespace Food_Delivery.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Narudzbina", b =>
                 {
                     b.HasOne("DostavaHrane.Entiteti.Adresa", "Adresa")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("AdresaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DostavaHrane.Entiteti.Dostavljac", "Dostavljac")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("DostavljacId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DostavaHrane.Entiteti.Restoran", "Restoran")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("RestoranId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -292,7 +273,7 @@ namespace Food_Delivery.Migrations
                     b.HasOne("DostavaHrane.Entiteti.Narudzbina", "Narudzbina")
                         .WithMany("StavkeNarudzbine")
                         .HasForeignKey("NarudzbinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Jelo");
@@ -320,7 +301,12 @@ namespace Food_Delivery.Migrations
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Adresa", b =>
                 {
-                    b.Navigation("AdreseMusterija");
+                    b.Navigation("Narudzbine");
+                });
+
+            modelBuilder.Entity("DostavaHrane.Entiteti.Dostavljac", b =>
+                {
+                    b.Navigation("Narudzbine");
                 });
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Jelo", b =>
@@ -335,12 +321,14 @@ namespace Food_Delivery.Migrations
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
-                    b.Navigation("AdreseMusterija");
+                    b.Navigation("Adrese");
                 });
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>
                 {
                     b.Navigation("Jela");
+
+                    b.Navigation("Narudzbine");
                 });
 #pragma warning restore 612, 618
         }

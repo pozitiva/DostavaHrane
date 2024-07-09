@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DostavaHrane.Entiteti
+namespace DostavaHrane.Dto
 {
-    public class LoginZahtev
+    public class MusterijaLoginDto
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;

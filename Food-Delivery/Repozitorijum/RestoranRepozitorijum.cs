@@ -12,9 +12,10 @@ namespace DostavaHrane.Repozitorijum
         {
             _context= context;
         }
-        public Task DodajAsync(Restoran entity)
+        public async Task DodajAsync(Restoran restoran)
         {
-            throw new NotImplementedException();
+            _context.Add(restoran);
+            await _context.SaveChangesAsync();
         }
 
         public Task IzmeniAsync(Restoran restoran)

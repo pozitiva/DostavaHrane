@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
@@ -44,36 +45,36 @@ namespace DostavaHrane.Servisi
             throw new NotImplementedException();
         }
 
-        public async Task<string> RegistrujMusterijuAsync(RegistracijaZahtev zahtev)
+        public async Task<string> RegistrujMusterijuAsync(MusterijaDto musterija)
         {
-            if (string.IsNullOrEmpty(zahtev.Email) || string.IsNullOrEmpty(zahtev.Sifra))
+            if (string.IsNullOrEmpty(musterija.Email) || string.IsNullOrEmpty(musterija.Sifra))
             {
                 return null;
             }
-            if (await _musterijaRepozitorijum.ProveraEmailaAsync(zahtev.Email))
+            if (await _musterijaRepozitorijum.ProveraEmailaAsync(musterija.Email))
             {
                 return "Nalog sa ovim emailom vec postoji!";
             }
 
-            if(zahtev.Sifra != zahtev.PotvrdjenaSifra)
+            if(musterija.Sifra != musterija.PotvrdjenaSifra)
             {
                 return "Unete sifre se ne podudaraju";
             }
 
-            KreirajSifraHash(zahtev.Sifra,
+            KreirajSifraHash(musterija.Sifra,
                  out byte[] passwordHash,
                  out byte[] passwordSalt);
 
-            var musterija = new Musterija
+            var novaMusterija = new Musterija
             {
-                Email = zahtev.Email,
+                Email = musterija.Email,
                 SifraHash = passwordHash,
                 SifraSalt = passwordSalt,
                 VerifikacioniToken = KreirajRandomToken()
             };
 
 
-            await _musterijaRepozitorijum.DodajAsync(musterija);
+            await _musterijaRepozitorijum.DodajAsync(novaMusterija);
             return "Uspesna registracija";
         }
 
@@ -92,16 +93,16 @@ namespace DostavaHrane.Servisi
             }
         }
 
-        public async Task<Musterija> UlogujMusterijuAsync(LoginZahtev zahtev)
+        public async Task<Musterija> UlogujMusterijuAsync(MusterijaLoginDto musterija)
         {
-            Musterija musterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(zahtev);
+            Musterija novaMusterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
 
-            if (!VerifyPasswordHash(zahtev.Sifra, musterija.SifraHash, musterija.SifraSalt))
+            if (!VerifyPasswordHash(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
             {
                 return null;
             }
 
-            return musterija;
+            return novaMusterija;
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
@@ -114,9 +115,9 @@ namespace DostavaHrane.Servisi
             }
         }
 
-        System.Threading.Tasks.Task IMusterijaServis.ObrisiMusterijuAsync()
+        public async Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _musterijaRepozitorijum.VratiSveAdresePoMusterijiAsync(id);
         }
     }
 }

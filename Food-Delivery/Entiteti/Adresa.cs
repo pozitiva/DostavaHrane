@@ -8,7 +8,10 @@
         public string Ulica { get; set; }
         public string Grad {  get; set; }
 
-        public ICollection<AdresaMusterije> AdreseMusterija { get; set; }
-        //public ICollection<Narudzbina> Narudzbine {  get; set; }
+        public Musterija Musterija { get; set; }
+        public int MusterijaId { get; set; }
+
+        public ICollection<Narudzbina> Narudzbine { get; set; }
+
     }
 }

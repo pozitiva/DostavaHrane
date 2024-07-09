@@ -1,4 +1,5 @@
 ﻿using DostavaHrane.Data;
+using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.EntityFrameworkCore;
@@ -44,9 +45,14 @@ namespace DostavaHrane.Repozitorijum
             throw new NotImplementedException();
         }
 
-        public async Task<Musterija> VratiMusterijuSaEmailom(LoginZahtev zahtev)
+        public async Task<Musterija> VratiMusterijuSaEmailom(MusterijaLoginDto musterija)
         {
-            return await _context.Musterije.FirstOrDefaultAsync(u => u.Email == zahtev.Email);
+            return await _context.Musterije.FirstOrDefaultAsync(u => u.Email == musterija.Email);
+        }
+
+        public async Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int musterijaId)
+        {
+            return await _context.Adrese.Where(e => e.Musterija.Id == musterijaId).ToListAsync();
         }
     }
 }

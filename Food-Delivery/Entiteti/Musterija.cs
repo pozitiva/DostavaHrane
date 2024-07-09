@@ -8,6 +8,6 @@
         public byte[] SifraSalt { get; set ;} = new byte[32];
         public string? VerifikacioniToken { get; set; }
 
-        public ICollection<AdresaMusterije> AdreseMusterija { get; set; }
+        public ICollection<Adresa> Adrese { get; set; }
     }
 }

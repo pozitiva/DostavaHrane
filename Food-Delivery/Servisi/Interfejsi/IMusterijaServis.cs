@@ -1,4 +1,5 @@
-﻿using DostavaHrane.Entiteti;
+﻿using DostavaHrane.Dto;
+using DostavaHrane.Entiteti;
 
 namespace DostavaHrane.Servisi.Interfejsi
 {
@@ -10,7 +11,9 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task<Musterija> IzmeniMusterijuAsync();
         Task ObrisiMusterijuAsync();
 
-        Task<string> RegistrujMusterijuAsync(RegistracijaZahtev zahtev);
-        Task<Musterija> UlogujMusterijuAsync(LoginZahtev zahtev);
+        Task<string> RegistrujMusterijuAsync(MusterijaDto musterija);
+        Task<Musterija> UlogujMusterijuAsync(MusterijaLoginDto musterija);
+
+        Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int id);
     }
 }

@@ -13,7 +13,6 @@ namespace DostavaHrane.Data
         }
 
         public DbSet<Adresa> Adrese { get; set; }
-        public DbSet<AdresaMusterije> AdreseMusterija { get; set; }
         public DbSet<Dostavljac> Dostavljaci { get; set; }
         public DbSet<Jelo> Jela { get; set; }
         public DbSet<Korisnik> Korisnici { get; set; }
@@ -26,8 +25,6 @@ namespace DostavaHrane.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<Korisnik>()
                 .ToTable("Korisnici");
 
@@ -39,48 +36,6 @@ namespace DostavaHrane.Data
                 .ToTable("Restorani")
                 .HasBaseType<Korisnik>();
 
-            modelBuilder.Entity<AdresaMusterije>()
-                .HasKey(am => new { am.MusterijaId, am.AdresaId });
-
-            modelBuilder.Entity<AdresaMusterije>()
-                .HasOne(m => m.Musterija)
-                .WithMany(am => am.AdreseMusterija)
-                .HasForeignKey(m => m.MusterijaId);
-
-            modelBuilder.Entity<AdresaMusterije>()
-                .HasOne(a => a.Adresa)
-                .WithMany(am => am.AdreseMusterija)
-                .HasForeignKey(a => a.AdresaId);
-
-            modelBuilder.Entity<Narudzbina>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.DatumNarudzbine).IsRequired();
-                entity.Property(e => e.Status).HasMaxLength(50).IsRequired();
-                entity.Property(e => e.UkupnaCena).HasColumnType("decimal(18,2)");
-
-                entity.HasOne(e => e.Dostavljac)
-                    .WithMany()
-                    .HasForeignKey("DostavljacId")
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.Restoran)
-                    .WithMany()
-                    .HasForeignKey("RestoranId")
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.Adresa)
-                    .WithMany()
-                    .HasForeignKey("AdresaId")
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(e => e.StavkeNarudzbine)
-                    .WithOne(e => e.Narudzbina)
-                    .HasForeignKey(e => e.NarudzbinaId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // Configure Jelo entity
             modelBuilder.Entity<Jelo>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -99,38 +54,77 @@ namespace DostavaHrane.Data
                 .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<StavkaNarudzbine>(entity =>
+            modelBuilder.Entity<StavkaNarudzbine>()
+            .HasKey(sn => new { sn.JeloId, sn.NarudzbinaId });
+
+            modelBuilder.Entity<Narudzbina>(entity =>
             {
-                entity.HasKey(e => new { e.JeloId, e.NarudzbinaId });
+                entity.HasKey(e => e.Id);
 
-                entity.HasOne(e => e.Jelo)
-                    .WithMany(j => j.StavkeNarudzbine)
-                    .HasForeignKey(e => e.JeloId);
+                entity.HasOne(s => s.Restoran)
+               .WithMany(u => u.Narudzbine)
+               .HasForeignKey(s => s.RestoranId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.Narudzbina)
-                    .WithMany(n => n.StavkeNarudzbine)
+                entity.HasOne(s => s.Dostavljac)
+                .WithMany(u => u.Narudzbine)
+                .HasForeignKey(s => s.DostavljacId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(s => s.Adresa)
+                .WithMany(u => u.Narudzbine)
+                .HasForeignKey(s => s.AdresaId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.StavkeNarudzbine)
+                    .WithOne(e => e.Narudzbina)
                     .HasForeignKey(e => e.NarudzbinaId);
             });
 
-            // Configure StavkaNarudzbine entity
-            modelBuilder.Entity<StavkaNarudzbine>(entity =>
+            modelBuilder.Entity <Adresa>(entity =>
             {
-                entity.HasKey(e => new {  e.JeloId, e.NarudzbinaId });
-
-                entity.Property(e => e.Kolicina).IsRequired();
-
-                entity.HasOne(e => e.Jelo)
-                    .WithMany(e => e.StavkeNarudzbine)
-                    .HasForeignKey(e => e.JeloId);
-                //.OnDelete(DeleteBehavior.Restrict);
-
-
-                entity.HasOne(e => e.Narudzbina)
-                    .WithMany(e => e.StavkeNarudzbine)
-                    .HasForeignKey(e => e.NarudzbinaId);
-                    //.OnDelete(DeleteBehavior.Restrict);
-
+                entity.HasOne(s => s.Musterija)
+                .WithMany(u => u.Adrese)
+                .HasForeignKey(s => s.MusterijaId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
             });
+
+            // One-to-Many: Narudzbina -> StavkeNarudzbine
+            //modelBuilder.Entity<StavkaNarudzbine>()
+            //    .HasOne(sn => sn.Narudzbina)
+            //    .WithMany(n => n.StavkeNarudzbine)
+            //    .HasForeignKey(sn => sn.NarudzbinaId);
+
+            // One-to-Many: Jelo -> StavkeNarudzbine
+            //modelBuilder.Entity<StavkaNarudzbine>()
+            //    .HasOne(sn => sn.Jelo)
+            //    .WithMany(j => j.StavkeNarudzbine)
+            //    .HasForeignKey(sn => sn.JeloId);
+
+            // Many-to-One: Narudzbina -> Dostavljac
+            //modelBuilder.Entity<Narudzbina>()
+            //    .HasOne(n => n.Dostavljac)
+            //    .WithMany(d => d.Narudzbine)
+            //    .HasForeignKey(n => n.DostavljacId)
+            //    .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascade delete
+
+            // Many-to-One: Narudzbina -> Restoran
+            //modelBuilder.Entity<Narudzbina>()
+            //    .HasOne(n => n.Restoran)
+            //    .WithMany(r => r.Narudzbine)
+            //    .HasForeignKey(n => n.RestoranId)
+            //    .OnDelete(DeleteBehavior.Restrict); 
+
+            // Many-to-One: Narudzbina -> Adresa
+            //modelBuilder.Entity<Narudzbina>()
+            //    .HasOne(n => n.Adresa)
+            //    .WithMany(a => a.Narudzbine)
+            //    .HasForeignKey(n => n.AdresaId)
+             //   .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

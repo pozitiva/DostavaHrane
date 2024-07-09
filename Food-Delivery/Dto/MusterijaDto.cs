@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DostavaHrane.Entiteti
+namespace DostavaHrane.Dto
 {
-    public class RegistracijaZahtev
+    public class MusterijaDto
     {
+        public string Ime { get; set; }
+
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
 
@@ -12,7 +14,5 @@ namespace DostavaHrane.Entiteti
 
         [Required, Compare("Sifra", ErrorMessage = "Sifra i ponovljena sifra se ne poklapaju.")]
         public string PotvrdjenaSifra { get; set; } = string.Empty;
-
-
     }
 }

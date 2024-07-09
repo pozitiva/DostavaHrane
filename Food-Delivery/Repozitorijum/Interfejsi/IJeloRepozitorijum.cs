@@ -5,5 +5,6 @@ namespace DostavaHrane.Repozitorijum.Interfejsi
 {
     public interface IJeloRepozitorijum : IRepozitorijum<Jelo>
     {
+        Task<IEnumerable<Jelo>> VratiSveAsync();
     }
 }

@@ -10,7 +10,16 @@ namespace DostavaHrane.Helper
         {
             CreateMap<Jelo, JeloDto>();
             CreateMap<JeloDto, Jelo>();
+
             CreateMap<Restoran, RestoranDto>();
+
+            CreateMap<Narudzbina, NarudzbinaDto>();
+            CreateMap<NarudzbinaDto, Narudzbina>();
+
+            CreateMap<Adresa, AdresaDto>();
+            CreateMap<AdresaDto, Adresa>();
+
+            CreateMap<Musterija, MusterijaDto>();   
 
         }
     }

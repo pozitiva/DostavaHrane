@@ -6,26 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DostavaHrane.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Adrese",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Naziv = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ulica = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Grad = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Adrese", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Dostavljaci",
                 columns: table => new
@@ -47,7 +32,7 @@ namespace DostavaHrane.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,7 +44,10 @@ namespace DostavaHrane.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SifraHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    SifraSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    VerifikacioniToken = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,7 +65,7 @@ namespace DostavaHrane.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    RadnoVreme = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RadnoVreme = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,27 +79,25 @@ namespace DostavaHrane.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AdreseMusterija",
+                name: "Adrese",
                 columns: table => new
                 {
-                    MusterijaId = table.Column<int>(type: "int", nullable: false),
-                    AdresaId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Naziv = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ulica = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Grad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MusterijaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdreseMusterija", x => new { x.MusterijaId, x.AdresaId });
+                    table.PrimaryKey("PK_Adrese", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AdreseMusterija_Adrese_AdresaId",
-                        column: x => x.AdresaId,
-                        principalTable: "Adrese",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AdreseMusterija_Musterije_MusterijaId",
+                        name: "FK_Adrese_Musterije_MusterijaId",
                         column: x => x.MusterijaId,
                         principalTable: "Musterije",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,7 +119,7 @@ namespace DostavaHrane.Migrations
                         column: x => x.RestoranId,
                         principalTable: "Restorani",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,9 +184,9 @@ namespace DostavaHrane.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AdreseMusterija_AdresaId",
-                table: "AdreseMusterija",
-                column: "AdresaId");
+                name: "IX_Adrese_MusterijaId",
+                table: "Adrese",
+                column: "MusterijaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jela_RestoranId",
@@ -232,13 +218,7 @@ namespace DostavaHrane.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AdreseMusterija");
-
-            migrationBuilder.DropTable(
                 name: "StavkeNarudzbina");
-
-            migrationBuilder.DropTable(
-                name: "Musterije");
 
             migrationBuilder.DropTable(
                 name: "Jela");
@@ -254,6 +234,9 @@ namespace DostavaHrane.Migrations
 
             migrationBuilder.DropTable(
                 name: "Restorani");
+
+            migrationBuilder.DropTable(
+                name: "Musterije");
 
             migrationBuilder.DropTable(
                 name: "Korisnici");

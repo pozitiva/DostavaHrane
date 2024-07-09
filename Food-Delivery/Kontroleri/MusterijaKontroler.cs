@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DostavaHrane.Servisi.Interfejsi;
-using DostavaHrane.Entiteti;
-using Azure.Core;
-using Microsoft.EntityFrameworkCore;
-using DostavaHrane.Data;
-using System.Security.Cryptography;
-using System.Text;
-using DostavaHrane.Entiteti;
+using AutoMapper;
+using DostavaHrane.Dto;
 using DostavaHrane.Servisi;
 
 namespace DostavaHrane.Kontroleri
@@ -17,23 +12,27 @@ namespace DostavaHrane.Kontroleri
     {
  
         private readonly IMusterijaServis _musterijaServis;
-        public MusterijaKontroler(IMusterijaServis musterijaServis)
+        private readonly IMapper _mapper;
+        public MusterijaKontroler(IMusterijaServis musterijaServis, IMapper mapper)
         {
             _musterijaServis = musterijaServis;
+            _mapper = mapper;
 
         }
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Registracija(RegistracijaZahtev zahtev)
+        public async Task<IActionResult> Registracija(MusterijaDto musterijaDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //var musterija = _mapper.Map<Musterija>(musterijaDto);
 
-            string rezultat = await _musterijaServis.RegistrujMusterijuAsync(zahtev);
+            string rezultat = await _musterijaServis.RegistrujMusterijuAsync(musterijaDto);
+
             if (rezultat == "Nalog sa ovim emailom vec postoji!")
             {
                 return BadRequest("Nalog sa ovim emailom vec postoji!");
@@ -48,11 +47,11 @@ namespace DostavaHrane.Kontroleri
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginZahtev zahtev)
+        public async Task<IActionResult> Login(MusterijaLoginDto musterijaDto)
         {
 
 
-            var rezultat = await _musterijaServis.UlogujMusterijuAsync(zahtev);
+            var rezultat = await _musterijaServis.UlogujMusterijuAsync(musterijaDto);
 
             if(rezultat== null)
             {
@@ -62,6 +61,15 @@ namespace DostavaHrane.Kontroleri
 
             return Ok("Korisnik je uspesno ulogovan");
 
+        }
+
+        [HttpGet("{musterijaId}/adrese")]
+        public async Task<IActionResult> VratiSveAdreseZaMusteriju(int musterijaId)
+        {
+            var adrese = await _musterijaServis.VratiSveAdresePoMusterijiAsync(musterijaId);
+            var adreseDto = _mapper.Map<List<AdresaDto>>(adrese);
+
+            return Ok(adreseDto);
         }
     }
 

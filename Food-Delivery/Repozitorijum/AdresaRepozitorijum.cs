@@ -16,9 +16,9 @@ namespace DostavaHrane.Repozitorijum
 
         }
 
-        public async Task DodajAsync(Adresa entity)
+        public async Task DodajAsync(Adresa adresa)
         {
-            await _context.Adrese.AddAsync(entity);
+            await _context.Adrese.AddAsync(adresa);
             await _context.SaveChangesAsync();
         }
 
@@ -28,22 +28,16 @@ namespace DostavaHrane.Repozitorijum
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Adresa>> VratiSveAsync()
-        {
-            return await _context.Adrese.ToListAsync();
-        }
-
         public async Task<Adresa> VratiPoIdAsync(int id)
         {
-            return await _context.Adrese.FindAsync(id);
+            return await _context.Set<Adresa>().FindAsync(id);
         }
 
-        public async Task IzmeniAsync(Adresa entity)
+        public async Task IzmeniAsync(Adresa adresa)
         {
-            _context.Adrese.Update(entity);
+            _context.Adrese.Update(adresa);
             await _context.SaveChangesAsync();
         }
-
 
     }
 }
