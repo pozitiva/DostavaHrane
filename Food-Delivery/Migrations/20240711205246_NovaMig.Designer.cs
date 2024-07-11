@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DostavaHrane.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240709170140_MigIzmenaDataContext")]
-    partial class MigIzmenaDataContext
+    [Migration("20240711205246_NovaMig")]
+    partial class NovaMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,7 +142,10 @@ namespace DostavaHrane.Migrations
                     b.Property<DateTime>("DatumNarudzbine")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DostavljacId")
+                    b.Property<int?>("DostavljacId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MusterijaId")
                         .HasColumnType("int");
 
                     b.Property<int>("RestoranId")
@@ -160,6 +163,8 @@ namespace DostavaHrane.Migrations
                     b.HasIndex("AdresaId");
 
                     b.HasIndex("DostavljacId");
+
+                    b.HasIndex("MusterijaId");
 
                     b.HasIndex("RestoranId");
 
@@ -249,6 +254,11 @@ namespace DostavaHrane.Migrations
                     b.HasOne("DostavaHrane.Entiteti.Dostavljac", "Dostavljac")
                         .WithMany("Narudzbine")
                         .HasForeignKey("DostavljacId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DostavaHrane.Entiteti.Musterija", "Musterija")
+                        .WithMany("Narudzbine")
+                        .HasForeignKey("MusterijaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -261,6 +271,8 @@ namespace DostavaHrane.Migrations
                     b.Navigation("Adresa");
 
                     b.Navigation("Dostavljac");
+
+                    b.Navigation("Musterija");
 
                     b.Navigation("Restoran");
                 });
@@ -325,6 +337,8 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.Navigation("Adrese");
+
+                    b.Navigation("Narudzbine");
                 });
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>

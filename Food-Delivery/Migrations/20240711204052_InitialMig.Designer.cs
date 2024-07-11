@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DostavaHrane.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240709130927_InitialMig")]
+    [Migration("20240711204052_InitialMig")]
     partial class InitialMig
     {
         /// <inheritdoc />
@@ -142,7 +142,11 @@ namespace DostavaHrane.Migrations
                     b.Property<DateTime>("DatumNarudzbine")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DostavljacId")
+                    b.Property<int?>("DostavljacId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int>("MusterijaId")
                         .HasColumnType("int");
 
                     b.Property<int>("RestoranId")
@@ -150,8 +154,7 @@ namespace DostavaHrane.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("UkupnaCena")
                         .HasColumnType("decimal(18,2)");
@@ -161,6 +164,8 @@ namespace DostavaHrane.Migrations
                     b.HasIndex("AdresaId");
 
                     b.HasIndex("DostavljacId");
+
+                    b.HasIndex("MusterijaId");
 
                     b.HasIndex("RestoranId");
 
@@ -242,19 +247,25 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Narudzbina", b =>
                 {
                     b.HasOne("DostavaHrane.Entiteti.Adresa", "Adresa")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("AdresaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DostavaHrane.Entiteti.Dostavljac", "Dostavljac")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("DostavljacId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DostavaHrane.Entiteti.Musterija", "Musterija")
+                        .WithMany("Narudzbine")
+                        .HasForeignKey("MusterijaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DostavaHrane.Entiteti.Restoran", "Restoran")
-                        .WithMany()
+                        .WithMany("Narudzbine")
                         .HasForeignKey("RestoranId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -262,6 +273,8 @@ namespace DostavaHrane.Migrations
                     b.Navigation("Adresa");
 
                     b.Navigation("Dostavljac");
+
+                    b.Navigation("Musterija");
 
                     b.Navigation("Restoran");
                 });
@@ -277,7 +290,7 @@ namespace DostavaHrane.Migrations
                     b.HasOne("DostavaHrane.Entiteti.Narudzbina", "Narudzbina")
                         .WithMany("StavkeNarudzbine")
                         .HasForeignKey("NarudzbinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Jelo");
@@ -303,6 +316,16 @@ namespace DostavaHrane.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DostavaHrane.Entiteti.Adresa", b =>
+                {
+                    b.Navigation("Narudzbine");
+                });
+
+            modelBuilder.Entity("DostavaHrane.Entiteti.Dostavljac", b =>
+                {
+                    b.Navigation("Narudzbine");
+                });
+
             modelBuilder.Entity("DostavaHrane.Entiteti.Jelo", b =>
                 {
                     b.Navigation("StavkeNarudzbine");
@@ -316,11 +339,15 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.Navigation("Adrese");
+
+                    b.Navigation("Narudzbine");
                 });
 
             modelBuilder.Entity("DostavaHrane.Entiteti.Restoran", b =>
                 {
                     b.Navigation("Jela");
+
+                    b.Navigation("Narudzbine");
                 });
 #pragma warning restore 612, 618
         }

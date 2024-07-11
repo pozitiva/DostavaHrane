@@ -1,6 +1,7 @@
 ﻿using DostavaHrane.Data;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
+using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Repozitorijum
 {
@@ -18,9 +19,16 @@ namespace DostavaHrane.Repozitorijum
             await _context.SaveChangesAsync();
         }
 
-        public Task IzmeniAsync(Narudzbina entity)
+        public async Task DodajStavkuNarudzbineAsync(StavkaNarudzbine stavkaNarudzbine)
         {
-            throw new NotImplementedException();
+            _context.Add(stavkaNarudzbine);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task IzmeniAsync(Narudzbina narudzbina)
+        {
+            _context.Update(narudzbina);
+            await _context.SaveChangesAsync();
         }
 
         public Task ObrisiAsync(Narudzbina entity)
@@ -28,14 +36,15 @@ namespace DostavaHrane.Repozitorijum
             throw new NotImplementedException();
         }
 
-        public Task<Narudzbina> VratiPoIdAsync(int id)
+        public async Task<Jelo> VratiJelaPoId(int jeloId)
         {
-            throw new NotImplementedException();
+           return await  _context.Jela.Where(a => a.Id == jeloId).FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Narudzbina>> VratiSveAsync()
+        public async Task<Narudzbina> VratiPoIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Narudzbina>().FindAsync(id);  
         }
+
     }
 }

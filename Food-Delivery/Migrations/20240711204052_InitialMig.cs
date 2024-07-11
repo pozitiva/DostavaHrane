@@ -129,11 +129,12 @@ namespace DostavaHrane.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DatumNarudzbine = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UkupnaCena = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DostavljacId = table.Column<int>(type: "int", nullable: false),
                     RestoranId = table.Column<int>(type: "int", nullable: false),
-                    AdresaId = table.Column<int>(type: "int", nullable: false)
+                    AdresaId = table.Column<int>(type: "int", nullable: false),
+                    MusterijaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,6 +149,12 @@ namespace DostavaHrane.Migrations
                         name: "FK_Narudzbine_Dostavljaci_DostavljacId",
                         column: x => x.DostavljacId,
                         principalTable: "Dostavljaci",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Narudzbine_Musterije_MusterijaId",
+                        column: x => x.MusterijaId,
+                        principalTable: "Musterije",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -180,7 +187,7 @@ namespace DostavaHrane.Migrations
                         column: x => x.NarudzbinaId,
                         principalTable: "Narudzbine",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -202,6 +209,11 @@ namespace DostavaHrane.Migrations
                 name: "IX_Narudzbine_DostavljacId",
                 table: "Narudzbine",
                 column: "DostavljacId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Narudzbine_MusterijaId",
+                table: "Narudzbine",
+                column: "MusterijaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Narudzbine_RestoranId",
