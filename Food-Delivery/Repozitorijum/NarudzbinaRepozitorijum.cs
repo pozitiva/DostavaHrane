@@ -46,5 +46,9 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Set<Narudzbina>().FindAsync(id);  
         }
 
+        public async Task<Dostavljac> VratiPoIdDostavljacaAsync(int id)
+        {
+            return await _context.Set<Dostavljac>().FindAsync(id);
+        }
     }
 }

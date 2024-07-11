@@ -5,8 +5,9 @@ namespace DostavaHrane.Servisi.Interfejsi
 {
     public interface INarudzbinaServis
     {
-        Task DodajNarudzbinuAsync(int jeloId, Narudzbina narudzbina);
+        Task DodajNarudzbinuAsync(Narudzbina narudzbina);
         Task IzmeniNarudzbinuAsync(Narudzbina narudzbina);
-        Task<Narudzbina> VratiNarudzbinuPoIdAsync(int id);
+        Task<Dostavljac> VratiDostavljacaPoIdAsync(int dostavljacId);
+        Task<Narudzbina> VratiNarudzbinuPoIdAsync(int narudzbinaId);
     }
 }

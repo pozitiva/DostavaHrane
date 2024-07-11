@@ -4,6 +4,7 @@ using DostavaHrane.Entiteti;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Kontroleri
 {
@@ -12,31 +13,54 @@ namespace DostavaHrane.Kontroleri
     public class NarudzbinaKontroler:ControllerBase
     {
         private readonly INarudzbinaServis _narudzbinaServis;
+        private readonly IJeloServis _jeloServis;
         private readonly IMapper _mapper;
 
-        public NarudzbinaKontroler(INarudzbinaServis narudzbinaServis, IMapper mapper)
+        public NarudzbinaKontroler(INarudzbinaServis narudzbinaServis, IMapper mapper, IJeloServis jeloServis)
         {
             _narudzbinaServis = narudzbinaServis;
             _mapper = mapper;
+            _jeloServis = jeloServis;
         }
 
         [HttpPost]
-        public async Task<IActionResult> KreirajNarudzbinu(int jeloId, NarudzbinaDto narudzbinaDto)
+        public async Task<IActionResult> KreirajNarudzbinu( NarudzbinaDto narudzbinaDto)
         {
+            
+            var narudzbina = new Narudzbina
+            {
+                DatumNarudzbine = System.DateTime.Now,
+                StavkeNarudzbine = new List<StavkaNarudzbine>(),
+                AdresaId = narudzbinaDto.AdresaId,
+                MusterijaId= narudzbinaDto.MusterijaId,
+                RestoranId= narudzbinaDto.RestoranId,
+            };
 
-            if (narudzbinaDto == null)
-                return BadRequest(ModelState);
+            decimal ukupnaCena = 0;
 
-            var narudzbina = _mapper.Map<Narudzbina>(narudzbinaDto);
+            foreach (var stavkaDto in narudzbinaDto.StavkeNarudzbine)
+            {
+                var jelo = await _jeloServis.VratiJeloPoIdAsync(stavkaDto.JeloId);
+                if (jelo == null)
+                {
+                    return BadRequest("Nije nadjeno jelo");
+                }
+                var stavkaNarudzbine = new StavkaNarudzbine
+                {
+                    JeloId = stavkaDto.JeloId,
+                    Kolicina = stavkaDto.Kolicina,
+                    Narudzbina = narudzbina 
+                };
 
+                narudzbina.StavkeNarudzbine.Add(stavkaNarudzbine);
+                ukupnaCena += jelo.Cena * stavkaDto.Kolicina;
+            }
 
-            //var stavkeNarudzbine = _mapper.Map<List<StavkaNarudzbine>>(narudzbinaDto.StavkeNarudzbine);
-
-            //var narudzbina = _mapper.Map<Narudzbina>(narudzbinaDto);
-            //narudzbina.StavkeNarudzbine = stavkeNarudzbine;
-
+            narudzbina.UkupnaCena = ukupnaCena;
             narudzbina.Status = "U pripremi";
-            await _narudzbinaServis.DodajNarudzbinuAsync(jeloId, narudzbina);
+
+            await _narudzbinaServis.DodajNarudzbinuAsync(narudzbina);
+
             return Ok("Narudzbina uspesno kreirana");
         }
 
@@ -47,13 +71,21 @@ namespace DostavaHrane.Kontroleri
 
             if(narudzbina == null) return BadRequest(ModelState);
 
-            if(narudzbina.Status.Equals("U pripremi"))
+            Dostavljac dostavljac = await _narudzbinaServis.VratiDostavljacaPoIdAsync(dostavljacId);
+            if (dostavljac == null)
+            {
+                return BadRequest("Nije nadjen dostavljac");
+            }
+
+            if (narudzbina.Status.Equals("U pripremi"))
             {
                 narudzbina.Status = "Predato dostavljacu";
                 narudzbina.DostavljacId= dostavljacId;
             }else if(narudzbina.Status == "Predato dostavljacu")
             {
                 narudzbina.Status = "Dostavljeno";
+                dostavljac.BrojDostava++;
+
             }
 
             _narudzbinaServis.IzmeniNarudzbinuAsync(narudzbina);

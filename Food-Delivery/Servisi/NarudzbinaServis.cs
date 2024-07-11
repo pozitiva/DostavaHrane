@@ -16,24 +16,19 @@ namespace DostavaHrane.Servisi
             _narudzbinaRepozitorijum = narudzbinaRepozitorijum;
             
         }
-        public async Task DodajNarudzbinuAsync(int jeloId, Narudzbina narudzbina)
+        public async Task DodajNarudzbinuAsync(Narudzbina narudzbina)
         {
-            Jelo jelo = await _narudzbinaRepozitorijum.VratiJelaPoId(jeloId);
-
-            var stvakaNarudzbine = new StavkaNarudzbine()
-            {
-                Jelo = jelo,
-                Narudzbina = narudzbina
-            };
-
-            await _narudzbinaRepozitorijum.DodajStavkuNarudzbineAsync(stvakaNarudzbine);
-
             await _narudzbinaRepozitorijum.DodajAsync(narudzbina);
         }
 
         public async Task IzmeniNarudzbinuAsync(Narudzbina narudzbina)
         {
             await _narudzbinaRepozitorijum.IzmeniAsync(narudzbina);
+        }
+
+        public async Task<Dostavljac> VratiDostavljacaPoIdAsync(int dostavljacId)
+        {
+           return await _narudzbinaRepozitorijum.VratiPoIdDostavljacaAsync(dostavljacId);
         }
 
         public async Task<Narudzbina> VratiNarudzbinuPoIdAsync(int id)
