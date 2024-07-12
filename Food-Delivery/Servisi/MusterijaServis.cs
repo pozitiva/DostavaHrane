@@ -24,9 +24,10 @@ namespace DostavaHrane.Servisi
             throw new NotImplementedException();
         }
 
-        public Task<Musterija> IzmeniMusterijuAsync()
+        public async Task IzmeniMusterijuAsync(Musterija musterija)
         {
-            throw new NotImplementedException();
+            await _musterijaRepozitorijum.IzmeniAsync(musterija);
+
         }
 
         public Task ObrisiMusterijuAsync()
@@ -40,9 +41,9 @@ namespace DostavaHrane.Servisi
             throw new NotImplementedException();
         }
 
-        public Task<Musterija> VratiMusterijuPoIdAsync()
+        public async Task<Musterija> VratiMusterijuPoIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _musterijaRepozitorijum.VratiPoIdAsync(id);
         }
 
         public async Task<string> RegistrujMusterijuAsync(MusterijaDto musterija)

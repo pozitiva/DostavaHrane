@@ -30,9 +30,9 @@ namespace DostavaHrane.Repozitorijum
             throw new NotImplementedException();
         }
 
-        public Task<Musterija> VratiPoIdAsync(int id)
+        public async Task<Musterija> VratiPoIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Musterija>().FindAsync(id);
         }
 
         public async Task<bool> ProveraEmailaAsync(string email)
@@ -40,9 +40,10 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Musterije.AnyAsync(m => m.Email == email);
         }
 
-        public Task IzmeniAsync(Musterija entity)
+        public async Task IzmeniAsync(Musterija musterija)
         {
-            throw new NotImplementedException();
+            _context.Musterije.Update(musterija);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Musterija> VratiMusterijuSaEmailom(MusterijaLoginDto musterija)

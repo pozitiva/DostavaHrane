@@ -69,12 +69,12 @@ namespace DostavaHrane.Kontroleri
         {
             Narudzbina narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaId);
 
-            if(narudzbina == null) return BadRequest(ModelState);
+            if (narudzbina == null) return NotFound("Nije pronadjena narudzbina");
 
             Dostavljac dostavljac = await _narudzbinaServis.VratiDostavljacaPoIdAsync(dostavljacId);
             if (dostavljac == null)
             {
-                return BadRequest("Nije nadjen dostavljac");
+                return NotFound("Nije nadjen dostavljac");
             }
 
             if (narudzbina.Status.Equals("U pripremi"))

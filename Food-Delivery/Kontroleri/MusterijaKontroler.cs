@@ -3,6 +3,7 @@ using DostavaHrane.Servisi.Interfejsi;
 using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Servisi;
+using DostavaHrane.Entiteti;
 
 namespace DostavaHrane.Kontroleri
 {
@@ -71,6 +72,23 @@ namespace DostavaHrane.Kontroleri
 
             return Ok(adreseDto);
         }
+
+        //[HttpPut("{musterijaId}")]
+        //public async Task<IActionResult> IzmeniKorisnickiNalog (int musterijaId, MusterijaDto izmenjenaMusterija)
+        //{
+        //    Musterija musterija = await _musterijaServis.VratiMusterijuPoIdAsync(musterijaId);
+
+        //    if(musterija== null)
+        //    {
+        //        return NotFound("Nije pronadjena musterija");
+        //    }
+
+        //    _mapper.Map(izmenjenaMusterija, musterija);
+        //    await _musterijaServis.IzmeniMusterijuAsync(musterija);
+
+        //    return Ok("Korisnicki nalog je uspesno izmenjen");
+        //}
     }
+
 
 }

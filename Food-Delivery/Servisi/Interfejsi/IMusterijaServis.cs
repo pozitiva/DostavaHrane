@@ -6,9 +6,9 @@ namespace DostavaHrane.Servisi.Interfejsi
     public interface IMusterijaServis
     {
         Task<IEnumerable<Musterija>> VratiSveMusterijaAsync();
-        Task<Musterija> VratiMusterijuPoIdAsync();
+        Task<Musterija> VratiMusterijuPoIdAsync(int id);
         Task<Musterija> DodajMusterijuAsync();
-        Task<Musterija> IzmeniMusterijuAsync();
+        Task IzmeniMusterijuAsync(Musterija musterija);
         Task ObrisiMusterijuAsync();
 
         Task<string> RegistrujMusterijuAsync(MusterijaDto musterija);
