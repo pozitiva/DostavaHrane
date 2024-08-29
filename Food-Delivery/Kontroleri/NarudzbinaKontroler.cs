@@ -5,9 +5,11 @@ using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DostavaHrane.Filteri;
 
 namespace DostavaHrane.Kontroleri
 {
+    [AutorizacioniFilter]
     [Route("api/narudzbina")]
     [ApiController]
     public class NarudzbinaKontroler:ControllerBase
@@ -26,13 +28,14 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajNarudzbinu( NarudzbinaDto narudzbinaDto)
         {
-            
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             var narudzbina = new Narudzbina
             {
                 DatumNarudzbine = System.DateTime.Now,
                 StavkeNarudzbine = new List<StavkaNarudzbine>(),
                 AdresaId = narudzbinaDto.AdresaId,
-                MusterijaId= narudzbinaDto.MusterijaId,
+                MusterijaId= musterijaId,
                 RestoranId= narudzbinaDto.RestoranId,
             };
 
@@ -40,11 +43,6 @@ namespace DostavaHrane.Kontroleri
 
             foreach (var stavkaDto in narudzbinaDto.StavkeNarudzbine)
             {
-                var jelo = await _jeloServis.VratiJeloPoIdAsync(stavkaDto.JeloId);
-                if (jelo == null)
-                {
-                    return BadRequest("Nije nadjeno jelo");
-                }
                 var stavkaNarudzbine = new StavkaNarudzbine
                 {
                     JeloId = stavkaDto.JeloId,
@@ -53,7 +51,7 @@ namespace DostavaHrane.Kontroleri
                 };
 
                 narudzbina.StavkeNarudzbine.Add(stavkaNarudzbine);
-                ukupnaCena += jelo.Cena * stavkaDto.Kolicina;
+                ukupnaCena += stavkaDto.Cena * stavkaDto.Kolicina;
             }
 
             narudzbina.UkupnaCena = ukupnaCena;

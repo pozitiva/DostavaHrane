@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DostavaHrane.Entiteti;
+using System.ComponentModel.DataAnnotations;
 
 namespace DostavaHrane.Dto
 {
@@ -14,5 +15,7 @@ namespace DostavaHrane.Dto
 
         [Required, Compare("Sifra", ErrorMessage = "Sifra i ponovljena sifra se ne poklapaju.")]
         public string PotvrdjenaSifra { get; set; } = string.Empty;
+
+        public ICollection<AdresaDto> Adrese { get; set; }
     }
 }

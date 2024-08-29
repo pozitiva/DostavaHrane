@@ -38,6 +38,12 @@ namespace DostavaHrane.Kontroleri
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
             var restoranDto = _mapper.Map<RestoranDto>(restoran);
 
+            // TODO vratiti sva jela odmayh sa re4storanom
+            //var jela = await _restoranServis.VratiSvaJelaPoRestoranuAsync(restoranId);
+            //var jelaDto = _mapper.Map<List<JeloDto>>(jela);
+
+            //restoranDto.Jela = jelaDto; 
+
             return Ok(restoranDto);
         }
 
@@ -51,9 +57,28 @@ namespace DostavaHrane.Kontroleri
             return Ok(jelaDto);
         }
 
+        //[HttpGet("{restoranId}/jela/{jeloId}")]
+        //public async Task<IActionResult> VratiJeloZaRestoran(int restoranId, int jeloId)
+        //{
+        //    var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
+        //    if (restoran == null)
+        //    {
+        //        return NotFound("Restoran nije pronađen");
+        //    }
+
+        //    //var jelo = await _restoranServis.VratiJeloPoIdIZaRestoranAsync(restoranId, jeloId);
+        //    if (jelo == null)
+        //    {
+        //        return NotFound("Jelo nije pronađeno u ovom restoranu");
+        //    }
+
+        //    var jeloDto = _mapper.Map<JeloDto>(jelo);
+        //    return Ok(jeloDto);
+        //}
 
 
-       
+
+
 
     }
 }

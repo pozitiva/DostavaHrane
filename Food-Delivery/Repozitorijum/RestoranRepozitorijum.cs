@@ -30,7 +30,11 @@ namespace DostavaHrane.Repozitorijum
 
         public async Task<Restoran> VratiPoIdAsync(int id)
         {
-            return await _context.Restorani.Where(r=> r.Id==id).FirstOrDefaultAsync();
+            
+            return await _context.Restorani
+                         .Include(r => r.Jela)  
+                         .Where(r => r.Id == id)
+                         .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int restoranId)

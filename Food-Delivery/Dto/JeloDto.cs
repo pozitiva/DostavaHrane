@@ -14,5 +14,7 @@ namespace DostavaHrane.Dto
         public string TipJela { get; set; }
         [Required]
         public int RestoranId { get; set; }
+        public int Id { get; set; }
+
     }
 }

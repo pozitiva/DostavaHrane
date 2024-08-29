@@ -7,7 +7,6 @@ namespace DostavaHrane.Dto
         //public decimal UkupnaCena { get; set; }
         public int RestoranId { get; set; }
         public int AdresaId { get; set; }
-        public int MusterijaId {get; set; }
         public List<StavkaNarudzbineDto> StavkeNarudzbine { get; set; }
     }
 

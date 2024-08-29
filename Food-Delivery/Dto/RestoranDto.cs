@@ -7,8 +7,12 @@ namespace DostavaHrane.Dto
         public string Ime{ get; set;}
         public string RadnoVreme { get; set; }
 
-        public Dostavljac Dostavljac { get; set; }
-        public Restoran Restoran { get; set; }
-        public Adresa Adresa { get; set; }
+        public int Id { get; set; }
+
+        //public Dostavljac Dostavljac { get; set; }
+        //public Restoran Restoran { get; set; }
+        //public Adresa Adresa { get; set; }
+        public ICollection<JeloDto> Jela { get; set; }
+
     }
 }

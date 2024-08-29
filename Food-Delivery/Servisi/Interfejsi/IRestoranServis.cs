@@ -7,5 +7,6 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int id);
         Task<IEnumerable<Restoran>> VratiSveRestoraneAsync();
         Task<Restoran> VratiRestoranPoIdAsync(int id);
+       // Task VratiJeloPoIdIZaRestoranAsync(int restoranId, int jeloId);
     }
 }
