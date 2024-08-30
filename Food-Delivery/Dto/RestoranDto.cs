@@ -8,6 +8,7 @@ namespace DostavaHrane.Dto
         public string RadnoVreme { get; set; }
 
         public int Id { get; set; }
+        public string SlikaUrl { get; set; }
 
         //public Dostavljac Dostavljac { get; set; }
         //public Restoran Restoran { get; set; }

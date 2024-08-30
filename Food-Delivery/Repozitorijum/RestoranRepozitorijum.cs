@@ -44,7 +44,7 @@ namespace DostavaHrane.Repozitorijum
 
         public async Task<IEnumerable<Restoran>> VratiSveAsync()
         {
-            return await _context.Restorani.ToListAsync();
+            return await _context.Restorani.Include(r => r.Jela).ToListAsync();
         }
     }
 }

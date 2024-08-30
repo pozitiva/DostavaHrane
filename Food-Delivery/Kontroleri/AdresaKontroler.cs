@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
-using DostavaHrane.Repozitorijum.Interfejsi;
-using DostavaHrane.Servisi;
+using DostavaHrane.Filteri;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace DostavaHrane.Kontroleri
 {
-
+    [AutorizacioniFilter]
     [Route("api/adresa")]
     [ApiController]
     public class AdresaKontroler : ControllerBase
@@ -26,6 +25,8 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajAdresu(AdresaDto adresaDto)
         {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -40,6 +41,8 @@ namespace DostavaHrane.Kontroleri
         [HttpPut("{adresaId}")]
         public async Task<IActionResult> IzmeniAdresu(int adresaId, string nazivAdrese)
         {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
+using DostavaHrane.Filteri;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,10 @@ using System.Diagnostics.Metrics;
 
 namespace DostavaHrane.Kontroleri
 {
+    [AutorizacioniFilter]
     [Route("api/restoran")]
     [ApiController]
-    public class RestoranKontroler: ControllerBase
+    public class RestoranKontroler : ControllerBase
     {
         private readonly IRestoranServis _restoranServis;
         private readonly IMapper _mapper;
@@ -22,35 +24,51 @@ namespace DostavaHrane.Kontroleri
             _mapper = mapper;
         }
 
-     
+
         [HttpGet]
         public async Task<IActionResult> VratiSveRestorane()
         {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             var restorani = await _restoranServis.VratiSveRestoraneAsync();
             var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);
+
+            foreach (var restoran in restoraniDto)
+            {
+                //restoran.SlikaUrl = $"http://192.168.0.13:5076{restoran.SlikaUrl}";
+                restoran.SlikaUrl = $"{Request.Scheme}://{Request.Host}{restoran.SlikaUrl}";
+
+            }
 
             return Ok(restoraniDto);
         }
 
+
         [HttpGet("{restoranId}")]
         public async Task<IActionResult> VratiRestoranPoId(int restoranId)
         {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
             var restoranDto = _mapper.Map<RestoranDto>(restoran);
 
-            // TODO vratiti sva jela odmayh sa re4storanom
-            //var jela = await _restoranServis.VratiSvaJelaPoRestoranuAsync(restoranId);
-            //var jelaDto = _mapper.Map<List<JeloDto>>(jela);
+            restoranDto.SlikaUrl = $"{Request.Scheme}://{Request.Host}{restoran.SlikaUrl}";
 
-            //restoranDto.Jela = jelaDto; 
+            foreach (var jelo in restoranDto.Jela)
+            {
+                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
+            }
 
             return Ok(restoranDto);
         }
 
 
+
         [HttpGet("{restoranId}/jela")]
         public async Task<IActionResult> VratiSvaJelaZaRestoran(int restoranId)
         {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             var jela = await _restoranServis.VratiSvaJelaPoRestoranuAsync(restoranId);
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
 

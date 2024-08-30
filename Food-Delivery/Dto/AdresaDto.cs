@@ -7,6 +7,6 @@ namespace DostavaHrane.Dto
         public string Naziv { get; set; }
         public string Ulica { get; set; }
         public string Grad { get; set; }
-        public int MusterijaId { get; set; }
+        //public int MusterijaId { get; set; }
     }
 }

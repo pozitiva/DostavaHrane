@@ -12,8 +12,8 @@ namespace DostavaHrane.Servisi
         private readonly IMapper _mapper;
         public RestoranServis(IRestoranRepozitorijum restoranRepozitorijum, IMapper mapper)
         {
-            _restoranRepozitorijum= restoranRepozitorijum;
-            _mapper= mapper;
+            _restoranRepozitorijum = restoranRepozitorijum;
+            _mapper = mapper;
         }
         public async Task<Restoran> VratiRestoranPoIdAsync(int id)
         {

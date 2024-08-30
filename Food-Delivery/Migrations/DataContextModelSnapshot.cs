@@ -95,6 +95,10 @@ namespace DostavaHrane.Migrations
                     b.Property<int>("RestoranId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SlikaUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TipJela")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -213,6 +217,10 @@ namespace DostavaHrane.Migrations
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
 
                     b.Property<string>("RadnoVreme")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SlikaUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Restorani", (string)null);

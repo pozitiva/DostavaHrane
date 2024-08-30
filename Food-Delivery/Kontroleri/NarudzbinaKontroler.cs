@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
-using DostavaHrane.Servisi;
+using DostavaHrane.Filteri;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DostavaHrane.Filteri;
 
 namespace DostavaHrane.Kontroleri
 {
@@ -55,7 +53,7 @@ namespace DostavaHrane.Kontroleri
             }
 
             narudzbina.UkupnaCena = ukupnaCena;
-            narudzbina.Status = "U pripremi";
+            narudzbina.Status = "Na cekanju";
 
             await _narudzbinaServis.DodajNarudzbinuAsync(narudzbina);
 
@@ -74,12 +72,15 @@ namespace DostavaHrane.Kontroleri
             {
                 return NotFound("Nije nadjen dostavljac");
             }
-
-            if (narudzbina.Status.Equals("U pripremi"))
+            if (narudzbina.Status.Equals("Na cekanju")){
+                narudzbina.Status = "U pripremi";
+            }
+            else if (narudzbina.Status.Equals("U pripremi"))
             {
                 narudzbina.Status = "Predato dostavljacu";
-                narudzbina.DostavljacId= dostavljacId;
-            }else if(narudzbina.Status == "Predato dostavljacu")
+                narudzbina.DostavljacId = dostavljacId;
+            }
+            else if(narudzbina.Status == "Predato dostavljacu")
             {
                 narudzbina.Status = "Dostavljeno";
                 dostavljac.BrojDostava++;

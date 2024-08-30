@@ -1,4 +1,5 @@
-﻿using DostavaHrane.Entiteti;
+﻿using DostavaHrane.Dto;
+using DostavaHrane.Entiteti;
 
 namespace DostavaHrane.Servisi.Interfejsi
 {
