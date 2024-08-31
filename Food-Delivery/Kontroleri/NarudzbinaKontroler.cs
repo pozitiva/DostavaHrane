@@ -33,8 +33,8 @@ namespace DostavaHrane.Kontroleri
                 DatumNarudzbine = System.DateTime.Now,
                 StavkeNarudzbine = new List<StavkaNarudzbine>(),
                 AdresaId = narudzbinaDto.AdresaId,
-                MusterijaId= musterijaId,
-                RestoranId= narudzbinaDto.RestoranId,
+                MusterijaId= musterijaId.ToString(),
+                RestoranId= narudzbinaDto.RestoranId.ToString(),
             };
 
             decimal ukupnaCena = 0;

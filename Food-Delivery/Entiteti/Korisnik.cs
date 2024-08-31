@@ -1,10 +1,13 @@
-﻿namespace DostavaHrane.Entiteti
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace DostavaHrane.Entiteti
 
 {
-    public class Korisnik
+    public class Korisnik:IdentityUser
     {
-        public int Id { get; set; }
+
         public string? Ime {  get; set; }
+
 
     }
 }

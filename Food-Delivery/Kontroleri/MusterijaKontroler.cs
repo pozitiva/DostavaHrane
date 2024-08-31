@@ -43,18 +43,18 @@ namespace DostavaHrane.Kontroleri
         }
 
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(MusterijaLoginDto musterijaDto)
-        {
-            var rezultat = await _musterijaServis.UlogujMusterijuAsync(musterijaDto);
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login(KorisnikLoginDto musterijaDto)
+        //{
+        //    var rezultat = await _musterijaServis.UlogujMusterijuAsync(musterijaDto);
 
-            if(rezultat== null)
-            {
-                return BadRequest("Neuspesno logovanje");
-            }
+        //    if(rezultat== null)
+        //    {
+        //        return BadRequest("Neuspesno logovanje");
+        //    }
 
-            return Ok(rezultat);
-        }
+        //    return Ok(rezultat);
+        //}
 
         //[HttpGet("{musterijaId}/adrese")]
         //public async Task<IActionResult> VratiSveAdreseZaMusteriju(int musterijaId)

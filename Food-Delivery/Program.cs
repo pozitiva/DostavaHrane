@@ -4,8 +4,15 @@ using DostavaHrane.Repozitorijum;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +42,42 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddIdentity<Korisnik, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+//builder.Services.AddSwaggerGen(options =>
+//{ 
+
+
+
+
+//});
+
+//builder.Services.AddIdentity<Korisnik, IdentityRole>()
+//    .AddEntityFrameworkStores<DataContext>()
+//    .AddDefaultTokenProviders();
+
+//var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(key)
+//    };
+//});
 
 builder.Services.AddCors(options =>
 {
@@ -72,5 +115,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapIdentityApi<Korisnik>();
 
 app.Run();

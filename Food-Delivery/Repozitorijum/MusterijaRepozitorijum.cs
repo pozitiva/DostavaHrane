@@ -47,7 +47,7 @@ namespace DostavaHrane.Repozitorijum
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Musterija> VratiMusterijuSaEmailom(MusterijaLoginDto musterija)
+        public async Task<Musterija> VratiMusterijuSaEmailom(KorisnikLoginDto musterija)
         {
             //return await _context.Musterije.FirstOrDefaultAsync(u => u.Email == musterija.Email);
 
@@ -67,7 +67,7 @@ namespace DostavaHrane.Repozitorijum
 
         public async Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int musterijaId)
         {
-            return await _context.Adrese.Where(e => e.Musterija.Id == musterijaId).ToListAsync();
+            return await _context.Adrese.Where(e => e.Musterija.Id.Equals(musterijaId)).ToListAsync();
         }
     }
 }

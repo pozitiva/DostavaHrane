@@ -7,7 +7,7 @@ namespace DostavaHrane.Repozitorijum.Interfejsi
     public interface IMusterijaRepozitorijum : IRepozitorijum<Musterija>
     {
         Task<bool> ProveraEmailaAsync(string email);
-        Task<Musterija> VratiMusterijuSaEmailom(MusterijaLoginDto musterija);
+        Task<Musterija> VratiMusterijuSaEmailom(KorisnikLoginDto musterija);
         Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int musterijaId);
     }
 }

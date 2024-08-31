@@ -12,7 +12,7 @@ namespace DostavaHrane.Entiteti
 
         [JsonIgnore]
         public Musterija? Musterija { get; set; }
-        public int MusterijaId { get; set; }
+        public string MusterijaId { get; set; }
 
         public ICollection<Narudzbina> Narudzbine { get; set; }
 

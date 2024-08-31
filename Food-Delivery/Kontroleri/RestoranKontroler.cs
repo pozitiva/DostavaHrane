@@ -75,6 +75,18 @@ namespace DostavaHrane.Kontroleri
             return Ok(jelaDto);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(KorisnikLoginDto restoranDto)
+        {
+            var rezultat = await _restoranServis.UlogujRestoranAsync(restoranDto);
+
+            if (rezultat == null)
+            {
+                return BadRequest("Neuspesno logovanje");
+            }
+
+            return Ok(rezultat);
+        }
         //[HttpGet("{restoranId}/jela/{jeloId}")]
         //public async Task<IActionResult> VratiJeloZaRestoran(int restoranId, int jeloId)
         //{

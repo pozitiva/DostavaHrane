@@ -1,9 +1,11 @@
 ﻿using DostavaHrane.Entiteti;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<Korisnik, IdentityRole, string>
     {
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -25,6 +27,26 @@ namespace DostavaHrane.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var uloge = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Id = "musterija-uloga",
+                    Name = "Musterija",
+                    NormalizedName = "MUSTERIJA"
+                },
+                new IdentityRole
+                {
+                    Id = "restoran-uloga",
+                    Name = "Restoran",
+                    NormalizedName = "RESTORAN"
+                }
+              
+            };
+
+            modelBuilder.Entity<IdentityRole>().HasData(uloge);
+
+
             modelBuilder.Entity<Korisnik>()
                 .ToTable("Korisnici");
 
@@ -35,6 +57,8 @@ namespace DostavaHrane.Data
             modelBuilder.Entity<Restoran>()
                 .ToTable("Restorani")
                 .HasBaseType<Korisnik>();
+
+
 
             modelBuilder.Entity<Jelo>(entity =>
             {
@@ -99,7 +123,7 @@ namespace DostavaHrane.Data
                     .HasForeignKey(e => e.NarudzbinaId);
             });
 
-            modelBuilder.Entity <Adresa>(entity =>
+            modelBuilder.Entity<Adresa>(entity =>
             {
                 entity.HasOne(s => s.Musterija)
                     .WithMany(u => u.Adrese)
@@ -109,6 +133,7 @@ namespace DostavaHrane.Data
             });
 
             base.OnModelCreating(modelBuilder);
+            //modelBuilder.HasDefaultSchema("identity");
         }
 
     }

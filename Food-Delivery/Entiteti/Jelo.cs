@@ -9,7 +9,7 @@
 
         public string SlikaUrl { get; set; }
         public Restoran? Restoran { get; set; }
-        public int RestoranId { get; set; }
+        public string RestoranId { get; set; }
 
         public ICollection<StavkaNarudzbine>? StavkeNarudzbine { get; set; }
      }

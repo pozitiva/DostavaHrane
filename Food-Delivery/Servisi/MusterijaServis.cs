@@ -69,9 +69,9 @@ namespace DostavaHrane.Servisi
             var novaMusterija = new Musterija
             {
                 Email = musterija.Email,
-                SifraHash = passwordHash,
-                SifraSalt = passwordSalt,
-                VerifikacioniToken = KreirajRandomToken()
+                //SifraHash = passwordHash,
+                //SifraSalt = passwordSalt,
+                //VerifikacioniToken = KreirajRandomToken()
             };
 
 
@@ -94,17 +94,17 @@ namespace DostavaHrane.Servisi
             }
         }
 
-        public async Task<Musterija> UlogujMusterijuAsync(MusterijaLoginDto musterija)
-        {
-            Musterija novaMusterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
+        //public async Task<Musterija> UlogujMusterijuAsync(KorisnikLoginDto musterija)
+        //{
+        //    Musterija novaMusterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
 
-            if (!VerifyPasswordHash(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
-            {
-                return null;
-            }
+        //    if (!VerifyPasswordHash(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
+        //    {
+        //        return null;
+        //    }
 
-            return novaMusterija;
-        }
+        //    return novaMusterija;
+        //}
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
