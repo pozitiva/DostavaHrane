@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
-using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
-using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Diagnostics.Metrics;
 
 namespace DostavaHrane.Kontroleri
 {
@@ -73,7 +69,11 @@ namespace DostavaHrane.Kontroleri
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
 
             return Ok(jelaDto);
+
+
         }
+
+       
 
         //[HttpGet("{restoranId}/jela/{jeloId}")]
         //public async Task<IActionResult> VratiJeloZaRestoran(int restoranId, int jeloId)

@@ -32,6 +32,7 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
             var adresa = _mapper.Map<Adresa>(adresaDto);
+            adresa.MusterijaId = musterijaId;
 
             await _adresaServis.DodajAdresuAsync(adresa);
 

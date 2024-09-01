@@ -5,25 +5,24 @@
 namespace DostavaHrane.Migrations
 {
     /// <inheritdoc />
-    public partial class slikaJela : Migration
+    public partial class opisRestorana : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "SlikaUrl",
-                table: "Jela",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.RenameColumn(
+                name: "RadnoVreme",
+                table: "Restorani",
+                newName: "Opis");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SlikaUrl",
-                table: "Jela");
+            migrationBuilder.RenameColumn(
+                name: "Opis",
+                table: "Restorani",
+                newName: "RadnoVreme");
         }
     }
 }

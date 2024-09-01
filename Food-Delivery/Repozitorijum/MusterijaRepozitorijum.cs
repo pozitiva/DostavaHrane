@@ -33,7 +33,7 @@ namespace DostavaHrane.Repozitorijum
         public async Task<Musterija> VratiPoIdAsync(int id)
         {
             return await _context.Set<Musterija>().FindAsync(id);
-            
+
         }
 
         public async Task<bool> ProveraEmailaAsync(string email)
@@ -47,21 +47,13 @@ namespace DostavaHrane.Repozitorijum
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Musterija> VratiMusterijuSaEmailom(MusterijaLoginDto musterija)
+        public async Task<Musterija> VratiMusterijuSaEmailom(KorisnikLoginDto musterija)
         {
-            //return await _context.Musterije.FirstOrDefaultAsync(u => u.Email == musterija.Email);
 
             return await _context.Musterije
-                         .Include(m => m.Adrese)
-                         .Where(u => u.Email == musterija.Email)
-                         .FirstOrDefaultAsync();
-
-            //return await _context.Musterije
-            //             .Include(m => m.Adrese)
-            //             .Where(u => u.Email == musterija.Email)
-            //             .FirstOrDefaultAsync();
-
-
+                     .Include(m => m.Adrese)
+                     .Where(u => u.Email == musterija.Email)
+                     .FirstOrDefaultAsync();
 
         }
 

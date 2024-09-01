@@ -8,5 +8,6 @@ namespace DostavaHrane.Repozitorijum.Interfejsi
         Task DodajStavkuNarudzbineAsync(StavkaNarudzbine stvakaNarudzbine);
         Task<Jelo> VratiJelaPoId(int jeloId);
         Task<Dostavljac> VratiPoIdDostavljacaAsync(int dostavljacId);
+        Task<IEnumerable<Narudzbina>> VratiSveNarudzbinePoRestoranuAsync( int restoranId);
     }
 }

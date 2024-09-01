@@ -11,8 +11,8 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task IzmeniMusterijuAsync(Musterija musterija);
         Task ObrisiMusterijuAsync();
 
-        Task<string> RegistrujMusterijuAsync(MusterijaDto musterija);
-        Task<Musterija> UlogujMusterijuAsync(MusterijaLoginDto musterija);
+        Task<string> RegistrujMusterijuAsync(MusterijaRegistracijaDto musterija);
+        Task<Musterija> UlogujMusterijuAsync(KorisnikLoginDto musterija);
 
         Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int id);
     }

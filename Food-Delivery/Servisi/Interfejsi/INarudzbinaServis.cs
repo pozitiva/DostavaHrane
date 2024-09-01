@@ -9,5 +9,7 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task IzmeniNarudzbinuAsync(Narudzbina narudzbina);
         Task<Dostavljac> VratiDostavljacaPoIdAsync(int dostavljacId);
         Task<Narudzbina> VratiNarudzbinuPoIdAsync(int narudzbinaId);
+        Task<IEnumerable<Narudzbina>> VratiSveNarudzbinePoRestoranu(int restoranId);
+
     }
 }

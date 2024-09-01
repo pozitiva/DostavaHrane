@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
+using DostavaHrane.Repozitorijum;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
+using System.Security.Cryptography;
 
 namespace DostavaHrane.Servisi
 {
@@ -15,6 +17,29 @@ namespace DostavaHrane.Servisi
             _restoranRepozitorijum = restoranRepozitorijum;
             _mapper = mapper;
         }
+
+        public async Task<Restoran> UlogujRestoranAsync(KorisnikLoginDto restoran)
+        {
+           Restoran noviRestoran = await _restoranRepozitorijum.VratiRestoranSaEmailom(restoran);
+
+            if (!VerifyPasswordHash(restoran.Sifra, noviRestoran.SifraHash, noviRestoran.SifraSalt))
+            {
+                return null;
+            }
+
+            return noviRestoran;
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac
+                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
+        }
+
         public async Task<Restoran> VratiRestoranPoIdAsync(int id)
         {
             return await _restoranRepozitorijum.VratiPoIdAsync(id);

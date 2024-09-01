@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DostavaHrane.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240830185624_slikaJela")]
-    partial class slikaJela
+    [Migration("20240901114723_InitialMig")]
+    partial class InitialMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,8 +122,20 @@ namespace DostavaHrane.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Ime")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("SifraHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("SifraSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -196,21 +208,6 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("SifraHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("SifraSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("VerifikacioniToken")
-                        .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Musterije", (string)null);
                 });

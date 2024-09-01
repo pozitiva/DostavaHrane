@@ -119,8 +119,21 @@ namespace DostavaHrane.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Ime")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("SifraHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("SifraSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -194,21 +207,6 @@ namespace DostavaHrane.Migrations
                 {
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("SifraHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("SifraSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("VerifikacioniToken")
-                        .HasColumnType("nvarchar(max)");
-
                     b.ToTable("Musterije", (string)null);
                 });
 
@@ -216,7 +214,7 @@ namespace DostavaHrane.Migrations
                 {
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
 
-                    b.Property<string>("RadnoVreme")
+                    b.Property<string>("Opis")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SlikaUrl")

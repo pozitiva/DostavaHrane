@@ -1,4 +1,5 @@
 ﻿using DostavaHrane.Data;
+using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,13 @@ namespace DostavaHrane.Repozitorijum
                          .Include(r => r.Jela)  
                          .Where(r => r.Id == id)
                          .FirstOrDefaultAsync();
+        }
+
+        public async Task<Restoran> VratiRestoranSaEmailom(KorisnikLoginDto restoran)
+        {
+            return await _context.Restorani
+                          .Where(u => u.Email == restoran.Email)
+                          .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int restoranId)

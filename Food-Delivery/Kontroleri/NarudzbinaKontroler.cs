@@ -24,7 +24,7 @@ namespace DostavaHrane.Kontroleri
         }
 
         [HttpPost]
-        public async Task<IActionResult> KreirajNarudzbinu( NarudzbinaDto narudzbinaDto)
+        public async Task<IActionResult> KreirajNarudzbinu( KreiranjeNarudzbineDto narudzbinaDto)
         {
             int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
@@ -89,7 +89,21 @@ namespace DostavaHrane.Kontroleri
 
             _narudzbinaServis.IzmeniNarudzbinuAsync(narudzbina);
 
-            return Ok("Status narudzbine je uspesno izmenjen");
+            return Ok("Status narudzbine je uspesno  izmenjen");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> VratiSveNarudzbineZaRestoran()
+        {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            var narudzbine = await _narudzbinaServis.VratiSveNarudzbinePoRestoranu(restoranId);
+
+            
+
+            var narudzbineDto = _mapper.Map<List<NarudzbinaDto>>(narudzbine);
+
+            return Ok(narudzbineDto);
         }
 
     }

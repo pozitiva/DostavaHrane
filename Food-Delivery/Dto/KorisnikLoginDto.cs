@@ -2,7 +2,7 @@
 
 namespace DostavaHrane.Dto
 {
-    public class MusterijaLoginDto
+    public class KorisnikLoginDto
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;

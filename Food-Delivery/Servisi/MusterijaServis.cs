@@ -46,7 +46,7 @@ namespace DostavaHrane.Servisi
             return await _musterijaRepozitorijum.VratiPoIdAsync(id);
         }
 
-        public async Task<string> RegistrujMusterijuAsync(MusterijaDto musterija)
+        public async Task<string> RegistrujMusterijuAsync(MusterijaRegistracijaDto musterija)
         {
             if (string.IsNullOrEmpty(musterija.Email) || string.IsNullOrEmpty(musterija.Sifra))
             {
@@ -68,10 +68,11 @@ namespace DostavaHrane.Servisi
 
             var novaMusterija = new Musterija
             {
+                Ime= musterija.Ime,
                 Email = musterija.Email,
                 SifraHash = passwordHash,
                 SifraSalt = passwordSalt,
-                VerifikacioniToken = KreirajRandomToken()
+                
             };
 
 
@@ -79,10 +80,7 @@ namespace DostavaHrane.Servisi
             return "Uspesna registracija";
         }
 
-        private string KreirajRandomToken()
-        {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-        }
+
 
         private void KreirajSifraHash(string sifra, out byte[] sifraHash, out byte[] sifraSalt)
         {
@@ -94,7 +92,7 @@ namespace DostavaHrane.Servisi
             }
         }
 
-        public async Task<Musterija> UlogujMusterijuAsync(MusterijaLoginDto musterija)
+        public async Task<Musterija> UlogujMusterijuAsync(KorisnikLoginDto musterija)
         {
             Musterija novaMusterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
 

@@ -32,7 +32,10 @@ namespace DostavaHrane.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SifraHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    SifraSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,11 +46,7 @@ namespace DostavaHrane.Migrations
                 name: "Musterije",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SifraHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    SifraSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    VerifikacioniToken = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,7 +64,8 @@ namespace DostavaHrane.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    RadnoVreme = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RadnoVreme = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SlikaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,6 +109,7 @@ namespace DostavaHrane.Migrations
                     Naziv = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Cena = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TipJela = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SlikaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RestoranId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -131,7 +132,7 @@ namespace DostavaHrane.Migrations
                     DatumNarudzbine = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UkupnaCena = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DostavljacId = table.Column<int>(type: "int", nullable: false),
+                    DostavljacId = table.Column<int>(type: "int", nullable: true),
                     RestoranId = table.Column<int>(type: "int", nullable: false),
                     AdresaId = table.Column<int>(type: "int", nullable: false),
                     MusterijaId = table.Column<int>(type: "int", nullable: false)
