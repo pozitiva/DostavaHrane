@@ -36,9 +36,17 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Set<Jelo>().FindAsync(id);
         }
 
+        public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranu(int restoranId)
+        {
+            return await _context.Jela
+                       .Where(n => n.RestoranId == restoranId)
+                       .ToListAsync();
+        }
+
         public async Task<IEnumerable<Jelo>> VratiSveAsync()
         {
             return await _context.Jela.ToListAsync();
         }
+
     }
 }

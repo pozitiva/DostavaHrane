@@ -40,5 +40,10 @@ namespace DostavaHrane.Servisi
             return await _jeloRepozitorijum.VratiSveAsync();
         }
 
+        public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranu(int restoranId)
+        {
+           return await _jeloRepozitorijum.VratiSvaJelaPoRestoranu(restoranId);
+        }
+
     }
 }

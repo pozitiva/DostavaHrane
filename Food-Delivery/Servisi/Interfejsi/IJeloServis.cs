@@ -9,5 +9,6 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task IzmeniJeloAsync(Jelo jelo);
         Task ObrisiJeloAsync(Jelo jelo);
         Task<Jelo> VratiJeloPoIdAsync(int jeloId);
+        Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranu(int restoranId);
     }
 }

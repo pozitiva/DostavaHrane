@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using DostavaHrane.Dto;
 using System.Diagnostics.Metrics;
+using DostavaHrane.Filteri;
 
 namespace DostavaHrane.Kontroleri
 {
+    [AutorizacioniFilter]
     [Route("api/jelo")]
     [ApiController]
     public class JeloKontroler : ControllerBase
@@ -22,44 +24,90 @@ namespace DostavaHrane.Kontroleri
         }
 
 
-
         [HttpGet]
-        public async Task<IActionResult> VratiSvaJela()
+        public async Task<IActionResult> VratiSveJelaZaRestoran()
         {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            var jela = await _jeloServis.VratiSvaJelaPoRestoranu(restoranId);
 
-            var jela = await _jeloServis.VratiSvaJelaAsync();
+           
+            foreach (var jelo in jela)
+            {
+                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
+            }
+
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
 
             return Ok(jelaDto);
         }
 
-        
+        //[HttpPost]
+        //public async Task<IActionResult> KreirajJelo(JeloDto jeloDto)
+        //{
+        //    int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var jelo = _mapper.Map<Jelo>(jeloDto);
+        //    jelo.RestoranId= restoranId;
+
+        //    await _jeloServis.DodajJeloAsync(jelo);
+           
+        //    return Ok();
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> KreirajJelo(JeloDto jeloDto)
+        public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string tipJela)
         {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var jelo = _mapper.Map<Jelo>(jeloDto);
+
+            Jelo jelo = new Jelo { Naziv = naziv, Cena = cena, TipJela = tipJela, RestoranId = restoranId };
+
+            if(slika != null && slika.Length!=0)
+            {
+                var path = Path.Combine("static/slike/jela", slika.FileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await slika.CopyToAsync(stream);
+                }
+
+                jelo.SlikaUrl = "static/slike/jela/" + slika.FileName;
+            }
+                
 
             await _jeloServis.DodajJeloAsync(jelo);
-           
-            return Ok("Jelo je uspesno dodato");
+
+            return Ok();
         }
 
         [HttpPut("{jeloId}")]
 
-        public async Task<IActionResult> IzmeniJelo(int jeloId, [FromBody] JeloDto izmenjenoJelo)
+        public async Task<IActionResult> IzmeniJelo([FromBody] JeloDto izmenjenoJelo)
+
         {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+          
+            if(izmenjenoJelo.RestoranId != restoranId)
+            {
+                return Unauthorized();
+            }
 
-            var jelo = await _jeloServis.VratiJeloPoIdAsync(jeloId);
+            var jelo = await _jeloServis.VratiJeloPoIdAsync(izmenjenoJelo.Id);
 
             if (jelo == null)
             {
@@ -67,6 +115,7 @@ namespace DostavaHrane.Kontroleri
             }
 
             _mapper.Map(izmenjenoJelo, jelo);
+            
 
             await _jeloServis.IzmeniJeloAsync(jelo);
 
@@ -76,6 +125,8 @@ namespace DostavaHrane.Kontroleri
         [HttpDelete("{jeloId}")]
         public async Task<IActionResult> ObrisiJelo(int jeloId)
         {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -92,6 +143,8 @@ namespace DostavaHrane.Kontroleri
 
             return Ok("Jelo je uspešno obrisano");
         }
+
+      
 
     }
 }

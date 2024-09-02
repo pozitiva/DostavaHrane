@@ -12,11 +12,11 @@ namespace DostavaHrane.Dto
         public decimal Cena { get; set; }
         [Required]
         public string TipJela { get; set; }
-        [Required]
+        
         public int RestoranId { get; set; }
         public int Id { get; set; }
 
-        public string SlikaUrl { get; set; }
+        public string? SlikaUrl { get; set; }
 
     }
 }

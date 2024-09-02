@@ -46,14 +46,14 @@ namespace DostavaHrane.Kontroleri
             int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
+            foreach (var jelo in restoran.Jela)
+            {
+                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
+            }
             var restoranDto = _mapper.Map<RestoranDto>(restoran);
 
             restoranDto.SlikaUrl = $"{Request.Scheme}://{Request.Host}{restoran.SlikaUrl}";
 
-            foreach (var jelo in restoranDto.Jela)
-            {
-                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
-            }
 
             return Ok(restoranDto);
         }

@@ -54,12 +54,12 @@ namespace DostavaHrane.Repozitorijum
         public async Task<IEnumerable<Narudzbina>> VratiSveNarudzbinePoRestoranuAsync(int restoranId)
         {
             return await _context.Narudzbine
-        .Include(n => n.StavkeNarudzbine)
-            .ThenInclude(s => s.Jelo)  // Dodaj uključivanje Jela
-        .Include(n => n.Musterija)      // Dodaj uključivanje Musterije
-        .Include(n => n.Adresa)         // Dodaj uključivanje Adrese
-        .Where(n => n.RestoranId == restoranId)
-        .ToListAsync();
+                        .Include(n => n.StavkeNarudzbine)
+                        .ThenInclude(s => s.Jelo)
+                        .Include(n => n.Musterija)
+                        .Include(n => n.Adresa)
+                        .Where(n => n.RestoranId == restoranId)
+                        .ToListAsync();
         }
 
 

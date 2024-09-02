@@ -7,7 +7,7 @@
         public decimal Cena { get; set; }
         public string TipJela { get; set; }
 
-        public string SlikaUrl { get; set; }
+        public string? SlikaUrl { get; set; }
         public Restoran? Restoran { get; set; }
         public int RestoranId { get; set; }
 
