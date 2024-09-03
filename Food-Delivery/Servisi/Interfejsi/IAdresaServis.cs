@@ -6,7 +6,7 @@ namespace DostavaHrane.Servisi.Interfejsi
     {
         Task DodajAdresuAsync(Adresa adresa);
         Task IzmeniAdresuAsync(Adresa adresa);
-        Task ObrisiAdresuAsync(Adresa adresa);
         Task<Adresa> VratiAdresuPoIdAsync(int adresaId);
+        Task <IEnumerable<Adresa>>VratiSveAdreseZaMusteriju(int musterijaId);
     }
 }

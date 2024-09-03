@@ -2,6 +2,7 @@
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
+using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -40,7 +41,7 @@ namespace DostavaHrane.Kontroleri
         }
 
         [HttpPut("{adresaId}")]
-        public async Task<IActionResult> IzmeniAdresu(int adresaId, string nazivAdrese)
+        public async Task<IActionResult> IzmeniAdresu([FromBody] AdresaDto izmenjenaAdresa)
         {
             int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
@@ -49,15 +50,32 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
 
-            Adresa adresa = await _adresaServis.VratiAdresuPoIdAsync(adresaId);
+            Adresa adresa = await _adresaServis.VratiAdresuPoIdAsync(izmenjenaAdresa.Id);
             if(adresa == null)
             {
                 return NotFound("Adresa nije pronađena");
             }
-            adresa.Naziv= nazivAdrese;
+
+            _mapper.Map(izmenjenaAdresa, adresa);
+
+
             await _adresaServis.IzmeniAdresuAsync(adresa);
 
             return Ok("Adresa je uspešno izmenjena");
+        }
+
+       
+        [HttpGet]
+        public async Task<IActionResult> VratiSveAdreseZaMusteriju()
+        {
+            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            var adrese = await _adresaServis.VratiSveAdreseZaMusteriju(musterijaId);
+
+
+
+            var adreseDto = _mapper.Map<List<AdresaDto>>(adrese);
+
+            return Ok(adreseDto);
         }
 
     }

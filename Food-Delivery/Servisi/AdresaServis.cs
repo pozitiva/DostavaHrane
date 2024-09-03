@@ -22,14 +22,16 @@ namespace DostavaHrane.Servisi
             await _adresaRepozitorijum.IzmeniAsync(adresa);
         }
 
-        public Task ObrisiAdresuAsync(Adresa adresa)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
         public async Task<Adresa> VratiAdresuPoIdAsync(int adresaId)
         {
             return await _adresaRepozitorijum.VratiPoIdAsync(adresaId);
+        }
+
+        public async Task<IEnumerable<Adresa>> VratiSveAdreseZaMusteriju(int musterijaId)
+        {
+            return await _adresaRepozitorijum.VratiSveAdreseZaMusteriju(musterijaId);
         }
     }
 }

@@ -122,27 +122,7 @@ namespace DostavaHrane.Kontroleri
             return Ok("Jelo je uspešno izmenjeno");
         }
 
-        [HttpDelete("{jeloId}")]
-        public async Task<IActionResult> ObrisiJelo(int jeloId)
-        {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var jelo = await _jeloServis.VratiJeloPoIdAsync(jeloId);
-
-            if (jelo == null)
-            {
-                return NotFound("Jelo nije pronađeno");
-            }
-
-            await _jeloServis.ObrisiJeloAsync(jelo);
-
-            return Ok("Jelo je uspešno obrisano");
-        }
+        
 
       
 

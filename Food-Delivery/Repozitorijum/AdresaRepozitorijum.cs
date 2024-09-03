@@ -39,5 +39,11 @@ namespace DostavaHrane.Repozitorijum
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Adresa>> VratiSveAdreseZaMusteriju(int musterijaId)
+        {
+            return await _context.Adrese
+                      .Where(n => n.MusterijaId == musterijaId)
+                      .ToListAsync();
+        }
     }
 }
