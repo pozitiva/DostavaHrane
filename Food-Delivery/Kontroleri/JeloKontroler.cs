@@ -30,11 +30,6 @@ namespace DostavaHrane.Kontroleri
             int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
             var jela = await _jeloServis.VratiSvaJelaPoRestoranu(restoranId);
 
-           
-            foreach (var jelo in jela)
-            {
-                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
-            }
 
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
 
@@ -69,30 +64,17 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
 
-
             Jelo jelo = new Jelo { Naziv = naziv, Cena = cena, TipJela = tipJela, RestoranId = restoranId };
 
-            if(slika != null && slika.Length!=0)
-            {
-                var path = Path.Combine("static/slike/jela", slika.FileName);
 
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await slika.CopyToAsync(stream);
-                }
-
-                jelo.SlikaUrl = "static/slike/jela/" + slika.FileName;
-            }
-                
-
-            await _jeloServis.DodajJeloAsync(jelo);
+            await _jeloServis.DodajJeloAsync(jelo, slika);
 
             return Ok();
         }
 
-        [HttpPut("{jeloId}")]
+        [HttpPut]
 
-        public async Task<IActionResult> IzmeniJelo([FromBody] JeloDto izmenjenoJelo)
+        public async Task<IActionResult> IzmeniJelo([FromBody]  JeloDto izmenjenoJelo)
 
         {
             int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
@@ -101,8 +83,8 @@ namespace DostavaHrane.Kontroleri
             {
                 return BadRequest(ModelState);
             }
-          
-            if(izmenjenoJelo.RestoranId != restoranId)
+
+            if (izmenjenoJelo.RestoranId != restoranId)
             {
                 return Unauthorized();
             }
@@ -115,16 +97,29 @@ namespace DostavaHrane.Kontroleri
             }
 
             _mapper.Map(izmenjenoJelo, jelo);
-            
+
 
             await _jeloServis.IzmeniJeloAsync(jelo);
 
             return Ok("Jelo je uspešno izmenjeno");
         }
 
-        
+        [HttpDelete("{jeloId}")]
+        public async Task<IActionResult> ObrisiJelo(int jeloId)
+        {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
-      
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok("Jelo je uspešno obrisano");
+        }
+
+
+
+
+
 
     }
 }

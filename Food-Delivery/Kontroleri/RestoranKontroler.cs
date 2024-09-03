@@ -29,13 +29,6 @@ namespace DostavaHrane.Kontroleri
             var restorani = await _restoranServis.VratiSveRestoraneAsync();
             var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);
 
-            foreach (var restoran in restoraniDto)
-            {
-                //restoran.SlikaUrl = $"http://192.168.0.13:5076{restoran.SlikaUrl}";
-                restoran.SlikaUrl = $"{Request.Scheme}://{Request.Host}{restoran.SlikaUrl}";
-
-            }
-
             return Ok(restoraniDto);
         }
 
@@ -46,13 +39,8 @@ namespace DostavaHrane.Kontroleri
             int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
-            foreach (var jelo in restoran.Jela)
-            {
-                jelo.SlikaUrl = $"{Request.Scheme}://{Request.Host}{jelo.SlikaUrl}";
-            }
-            var restoranDto = _mapper.Map<RestoranDto>(restoran);
 
-            restoranDto.SlikaUrl = $"{Request.Scheme}://{Request.Host}{restoran.SlikaUrl}";
+            var restoranDto = _mapper.Map<RestoranDto>(restoran);
 
 
             return Ok(restoranDto);
