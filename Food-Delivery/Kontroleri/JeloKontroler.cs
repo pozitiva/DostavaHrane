@@ -36,23 +36,6 @@ namespace DostavaHrane.Kontroleri
             return Ok(jelaDto);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> KreirajJelo(JeloDto jeloDto)
-        //{
-        //    int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var jelo = _mapper.Map<Jelo>(jeloDto);
-        //    jelo.RestoranId= restoranId;
-
-        //    await _jeloServis.DodajJeloAsync(jelo);
-           
-        //    return Ok();
-        //}
 
         [HttpPost]
         public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string tipJela)
@@ -113,6 +96,16 @@ namespace DostavaHrane.Kontroleri
             {
                 return BadRequest(ModelState);
             }
+
+            var jelo = await _jeloServis.VratiJeloPoIdAsync(jeloId);
+
+            if (jelo == null)
+            {
+                return NotFound("Jelo nije pronađeno");
+            }
+
+            await _jeloServis.ObrisiJeloAsync(jelo);
+
             return Ok("Jelo je uspešno obrisano");
         }
 

@@ -71,6 +71,9 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Slobodan")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Dostavljaci");
@@ -91,6 +94,10 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Opis")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RestoranId")
                         .HasColumnType("int");

@@ -17,7 +17,8 @@ namespace DostavaHrane.Helper
 
             CreateMap<Narudzbina, NarudzbinaDto>()
            .ForMember(dest => dest.Adresa, opt => opt.MapFrom(src => src.Adresa.Ulica))  
-           .ForMember(dest => dest.MusterijaIme, opt => opt.MapFrom(src => src.Musterija.Ime));  
+           .ForMember(dest => dest.MusterijaIme, opt => opt.MapFrom(src => src.Musterija.Ime))
+           .ForMember(dest => dest.DostavljacIme, opt => opt.MapFrom(src => src.Dostavljac.Ime));
 
             CreateMap<StavkaNarudzbine, StavkaNarudzbineDto>()
                 .ForMember(dest => dest.JeloIme, opt => opt.MapFrom(src => src.Jelo.Naziv));  

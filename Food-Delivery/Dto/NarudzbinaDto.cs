@@ -4,7 +4,7 @@ namespace DostavaHrane.Dto
 {
     public class NarudzbinaDto
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public int RestoranId { get; set; }
         public DateTime DatumNarudzbine { get; set; }
         public string? Status { get; set; }
@@ -17,7 +17,8 @@ namespace DostavaHrane.Dto
 
         public string? Adresa { get; set; }
         public string? MusterijaIme { get; set; }
-      
+        public string? DostavljacIme { get; set; }
+
         public ICollection<StavkaNarudzbineDto> StavkeNarudzbine { get; set; }
 
 

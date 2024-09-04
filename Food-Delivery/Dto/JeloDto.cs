@@ -15,6 +15,7 @@ namespace DostavaHrane.Dto
         
         public int RestoranId { get; set; }
         public int Id { get; set; }
+        public string Opis { get; set; }
 
         public string? SlikaUrl { get; set; }
 

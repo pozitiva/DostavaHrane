@@ -46,11 +46,23 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Set<Narudzbina>().FindAsync(id);
         }
 
-        public async Task<Dostavljac> VratiPoIdDostavljacaAsync(int id)
+        //public async Task<Dostavljac> VratiPoIdDostavljacaAsync(int id)
+        //{
+        //    return await _context.Set<Dostavljac>().FindAsync(id);
+        //}
+
+        public async Task AzurirajDostavljacaAsync(Dostavljac dostavljac)
         {
-            return await _context.Set<Dostavljac>().FindAsync(id);
+            _context.Dostavljaci.Update(dostavljac);
+            await _context.SaveChangesAsync();
         }
 
+        public async Task<Dostavljac> VratiSlobodnogDostavljacaAsync()
+        {
+            return await _context.Dostavljaci
+            .Where(d => d.Slobodan)
+            .FirstOrDefaultAsync();
+        }
         public async Task<IEnumerable<Narudzbina>> VratiSveNarudzbinePoRestoranuAsync(int restoranId)
         {
             return await _context.Narudzbine
@@ -62,6 +74,9 @@ namespace DostavaHrane.Repozitorijum
                         .ToListAsync();
         }
 
-
+        public async Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId)
+        {
+            return await _context.Set<Dostavljac>().FindAsync(dostavljacId);
+        }
     }
 }

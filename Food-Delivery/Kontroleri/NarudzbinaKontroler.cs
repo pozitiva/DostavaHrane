@@ -2,6 +2,7 @@
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
+using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +14,13 @@ namespace DostavaHrane.Kontroleri
     public class NarudzbinaKontroler:ControllerBase
     {
         private readonly INarudzbinaServis _narudzbinaServis;
-        private readonly IJeloServis _jeloServis;
         private readonly IMapper _mapper;
 
-        public NarudzbinaKontroler(INarudzbinaServis narudzbinaServis, IMapper mapper, IJeloServis jeloServis)
+        public NarudzbinaKontroler(INarudzbinaServis narudzbinaServis, IMapper mapper)
         {
             _narudzbinaServis = narudzbinaServis;
             _mapper = mapper;
-            _jeloServis = jeloServis;
+           
         }
 
         [HttpPost]
@@ -60,36 +60,59 @@ namespace DostavaHrane.Kontroleri
             return Ok("Narudzbina uspesno kreirana");
         }
 
-        [HttpPut("{narudzbinaId}")]
-        public async Task<IActionResult> IzmeniStatusNarudzbine(int narudzbinaId, int dostavljacId)
+        [HttpPut]
+        public async Task<IActionResult> IzmeniStatusNarudzbine([FromBody] NarudzbinaDto narudzbinaDto)
         {
-            Narudzbina narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaId);
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
-            if (narudzbina == null) return NotFound("Nije pronadjena narudzbina");
+            Narudzbina narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
 
-            Dostavljac dostavljac = await _narudzbinaServis.VratiDostavljacaPoIdAsync(dostavljacId);
-            if (dostavljac == null)
+            if (narudzbina == null) return NotFound("Nije pronađena narudžbina");
+
+            if (narudzbina.Status.Equals("Na cekanju"))
             {
-                return NotFound("Nije nadjen dostavljac");
-            }
-            if (narudzbina.Status.Equals("Na cekanju")){
                 narudzbina.Status = "U pripremi";
             }
             else if (narudzbina.Status.Equals("U pripremi"))
             {
+                
+                Dostavljac dostavljac = await _narudzbinaServis.VratiSlobodnogDostavljacaAsync();
+
+                if (dostavljac == null)
+                {
+                    return NotFound("Nije nađen slobodan dostavljac");
+                }
+
+                
                 narudzbina.Status = "Predato dostavljacu";
-                narudzbina.DostavljacId = dostavljacId;
+                narudzbina.DostavljacId = dostavljac.Id;
+
+                
+                dostavljac.Slobodan = false;
+                await _narudzbinaServis.AžurirajDostavljacaAsync(dostavljac);
             }
-            else if(narudzbina.Status == "Predato dostavljacu")
+            else if (narudzbina.Status == "Predato dostavljacu")
             {
+                
+                Dostavljac dostavljac = await _narudzbinaServis.VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
+
+                if (dostavljac == null)
+                {
+                    return NotFound("Dostavljač nije pronađen");
+                }
+
+               
                 narudzbina.Status = "Dostavljeno";
+                dostavljac.Slobodan = true;
                 dostavljac.BrojDostava++;
 
+                await _narudzbinaServis.AžurirajDostavljacaAsync(dostavljac);
             }
 
-            _narudzbinaServis.IzmeniNarudzbinuAsync(narudzbina);
+            // Ažuriranje narudžbine u bazi podataka
+            await _narudzbinaServis.IzmeniNarudzbinuAsync(narudzbina);
 
-            return Ok("Status narudzbine je uspesno  izmenjen");
+            return Ok("Status narudžbine je uspešno izmenjen");
         }
 
 
@@ -105,6 +128,21 @@ namespace DostavaHrane.Kontroleri
 
             return Ok(narudzbineDto);
         }
+
+
+        [HttpGet("{narudzbinaId}")]
+        public async Task<IActionResult> VratiNarudzbinuPoId(int narudzbinaId)
+        {
+            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+
+            var narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaId);
+
+            var narudzbinaDto = _mapper.Map<RestoranDto>(narudzbina);
+
+
+            return Ok(narudzbinaDto);
+        }
+
 
     }
 }
