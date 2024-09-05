@@ -6,10 +6,11 @@ using AutoMapper;
 using DostavaHrane.Dto;
 using System.Diagnostics.Metrics;
 using DostavaHrane.Filteri;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DostavaHrane.Kontroleri
 {
-    [AutorizacioniFilter]
+    [Authorize]
     [Route("api/jelo")]
     [ApiController]
     public class JeloKontroler : ControllerBase
@@ -27,7 +28,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveJelaZaRestoran()
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
             var jela = await _jeloServis.VratiSvaJelaPoRestoranu(restoranId);
 
 
@@ -40,7 +41,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string tipJela)
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             if (!ModelState.IsValid)
             {
@@ -60,7 +61,7 @@ namespace DostavaHrane.Kontroleri
         public async Task<IActionResult> IzmeniJelo([FromBody]  JeloDto izmenjenoJelo)
 
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             if (!ModelState.IsValid)
             {
@@ -90,7 +91,7 @@ namespace DostavaHrane.Kontroleri
         [HttpDelete("{jeloId}")]
         public async Task<IActionResult> ObrisiJelo(int jeloId)
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             if (!ModelState.IsValid)
             {

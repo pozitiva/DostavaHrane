@@ -11,7 +11,7 @@ namespace DostavaHrane.Repozitorijum
         private readonly DataContext _context;
         public RestoranRepozitorijum(DataContext context)
         {
-            _context= context;
+            _context = context;
         }
         public async Task DodajAsync(Restoran restoran)
         {
@@ -27,6 +27,11 @@ namespace DostavaHrane.Repozitorijum
         public Task ObrisiAsync(Restoran restoran)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv)
+        {
+            return await _context.Restorani.Where(r => string.IsNullOrEmpty(naziv) || r.Ime.Contains(naziv)).ToListAsync();
         }
 
         public async Task<Restoran> VratiPoIdAsync(int id)

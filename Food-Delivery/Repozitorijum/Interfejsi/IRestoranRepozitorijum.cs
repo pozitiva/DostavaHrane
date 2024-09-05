@@ -8,5 +8,6 @@ namespace DostavaHrane.Repozitorijum.Interfejsi
         Task<Restoran> VratiRestoranSaEmailom(KorisnikLoginDto restoran);
         Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int restoranId);
         Task<IEnumerable<Restoran>> VratiSveAsync();
+        Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv);
     }
 }

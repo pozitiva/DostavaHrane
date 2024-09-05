@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
+using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
 using DostavaHrane.Servisi.Interfejsi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DostavaHrane.Kontroleri
 {
-    [AutorizacioniFilter]
+    [Authorize]
     [Route("api/restoran")]
     [ApiController]
     public class RestoranKontroler : ControllerBase
@@ -24,7 +26,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveRestorane()
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             var restorani = await _restoranServis.VratiSveRestoraneAsync();
             var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);
@@ -36,7 +38,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{restoranId}")]
         public async Task<IActionResult> VratiRestoranPoId(int restoranId)
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
 
@@ -51,7 +53,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{restoranId}/jela")]
         public async Task<IActionResult> VratiSvaJelaZaRestoran(int restoranId)
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             var jela = await _restoranServis.VratiSvaJelaPoRestoranuAsync(restoranId);
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
@@ -61,7 +63,13 @@ namespace DostavaHrane.Kontroleri
 
         }
 
-       
+        [HttpGet("pretraga")]
+        public async Task<ActionResult<IEnumerable<Restoran>>> PretraziRestoranePoNazivu([FromQuery] string naziv)
+        {
+            var restorani = await _restoranServis.PretraziRestoranePoNazivu(naziv);
+            return Ok(restorani);
+        }
+
 
         //[HttpGet("{restoranId}/jela/{jeloId}")]
         //public async Task<IActionResult> VratiJeloZaRestoran(int restoranId, int jeloId)

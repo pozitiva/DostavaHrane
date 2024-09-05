@@ -3,6 +3,10 @@ using DostavaHrane.Dto;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace DostavaHrane.Kontroleri
 {
@@ -14,12 +18,14 @@ namespace DostavaHrane.Kontroleri
         private readonly IRestoranServis _restoranServis;
         private readonly IMusterijaServis _musterijaServis;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public KorisnikKontroler(IMusterijaServis musterijaServis, IRestoranServis restoranServis, IMapper mapper)
+        public KorisnikKontroler(IMusterijaServis musterijaServis, IRestoranServis restoranServis, IMapper mapper, IConfiguration configuration)
         {
             _musterijaServis = musterijaServis;
             _restoranServis = restoranServis;
             _mapper = mapper;
+            _configuration = configuration;
 
         }
 
@@ -54,7 +60,8 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest("Neuspesno logovanje");
             }
 
-            return Ok(rezultat);
+            var token = GenerateJwtToken(rezultat.Id.ToString());
+            return Ok( new { rezultat, token});
         }
 
 
@@ -68,7 +75,30 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest("Neuspesno logovanje");
             }
 
-            return Ok(rezultat);
+            var token = GenerateJwtToken(rezultat.Id.ToString());
+            return Ok(new { rezultat, token });
         }
+
+        private string GenerateJwtToken(string username)
+        {
+            var claims = new[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }

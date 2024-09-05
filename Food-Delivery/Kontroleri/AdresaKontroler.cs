@@ -4,12 +4,13 @@ using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace DostavaHrane.Kontroleri
 {
-    [AutorizacioniFilter]
+    [Authorize]
     [Route("api/adresa")]
     [ApiController]
     public class AdresaKontroler : ControllerBase
@@ -26,7 +27,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajAdresu(KreiranjeAdreseDto adresaDto)
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             if (!ModelState.IsValid)
             {
@@ -43,7 +44,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPut("{adresaId}")]
         public async Task<IActionResult> IzmeniAdresu([FromBody] AdresaDto izmenjenaAdresa)
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             if (!ModelState.IsValid)
             {
@@ -68,7 +69,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveAdreseZaMusteriju()
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
             var adrese = await _adresaServis.VratiSveAdreseZaMusteriju(musterijaId);
 
 

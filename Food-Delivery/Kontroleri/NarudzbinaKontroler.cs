@@ -4,11 +4,12 @@ using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
 using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DostavaHrane.Kontroleri
 {
-    [AutorizacioniFilter]
+    [Authorize]
     [Route("api/narudzbina")]
     [ApiController]
     public class NarudzbinaKontroler:ControllerBase
@@ -26,7 +27,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajNarudzbinu( KreiranjeNarudzbineDto narudzbinaDto)
         {
-            int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            var musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);  // 'sub' claim in JWT
 
             var narudzbina = new Narudzbina
             {
@@ -63,7 +64,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPut]
         public async Task<IActionResult> IzmeniStatusNarudzbine([FromBody] NarudzbinaDto narudzbinaDto)
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             Narudzbina narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
 
@@ -119,7 +120,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveNarudzbineZaRestoran()
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
             var narudzbine = await _narudzbinaServis.VratiSveNarudzbinePoRestoranu(restoranId);
 
             
@@ -133,7 +134,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{narudzbinaId}")]
         public async Task<IActionResult> VratiNarudzbinuPoId(int narudzbinaId)
         {
-            int restoranId = Convert.ToInt32(HttpContext.Items["Authorization"]);
+            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
 
             var narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaId);
 

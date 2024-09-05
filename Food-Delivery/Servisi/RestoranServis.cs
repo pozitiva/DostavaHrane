@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
-using DostavaHrane.Repozitorijum;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
 using System.Security.Cryptography;
@@ -53,6 +52,11 @@ namespace DostavaHrane.Servisi
         public async Task<IEnumerable<Restoran>> VratiSveRestoraneAsync()
         {
             return await _restoranRepozitorijum.VratiSveAsync();
+        }
+
+        public async Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv)
+        {
+            return await _restoranRepozitorijum.PretraziRestoranePoNazivu(naziv);
         }
     }
 }
