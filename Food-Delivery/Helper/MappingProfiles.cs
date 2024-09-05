@@ -31,6 +31,9 @@ namespace DostavaHrane.Helper
             CreateMap<Adresa, AdresaDto>();
             CreateMap<AdresaDto, Adresa>();
 
+            CreateMap<Adresa, KreiranjeAdreseDto>();
+            CreateMap<KreiranjeAdreseDto, Adresa>();
+
             CreateMap<Musterija, MusterijaDto>();   
             CreateMap<MusterijaDto, Musterija>();
 

@@ -24,7 +24,7 @@ namespace DostavaHrane.Kontroleri
         }
 
         [HttpPost]
-        public async Task<IActionResult> KreirajAdresu(AdresaDto adresaDto)
+        public async Task<IActionResult> KreirajAdresu(KreiranjeAdreseDto adresaDto)
         {
             int musterijaId = Convert.ToInt32(HttpContext.Items["Authorization"]);
 
