@@ -54,9 +54,9 @@ namespace DostavaHrane.Servisi
             return await _restoranRepozitorijum.VratiSveAsync();
         }
 
-        public async Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv)
+        public async Task<IEnumerable<Restoran>> PretraziRestorane(string naziv, string tip)
         {
-            return await _restoranRepozitorijum.PretraziRestoranePoNazivu(naziv);
+            return await _restoranRepozitorijum.PretraziRestorane(naziv, tip);
         }
     }
 }

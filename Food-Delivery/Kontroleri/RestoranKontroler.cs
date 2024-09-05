@@ -64,10 +64,14 @@ namespace DostavaHrane.Kontroleri
         }
 
         [HttpGet("pretraga")]
-        public async Task<ActionResult<IEnumerable<Restoran>>> PretraziRestoranePoNazivu([FromQuery] string naziv)
+        public async Task<IActionResult> PretraziRestoranePoNazivu([FromQuery(Name = "naziv")] string naziv = null, [FromQuery(Name ="tip")] string tip = null)
         {
-            var restorani = await _restoranServis.PretraziRestoranePoNazivu(naziv);
-            return Ok(restorani);
+            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+
+            var restorani = await _restoranServis.PretraziRestorane(naziv, tip);
+            var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);
+
+            return Ok(restoraniDto);
         }
 
 

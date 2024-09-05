@@ -29,16 +29,39 @@ namespace DostavaHrane.Repozitorijum
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv)
+        public async Task<IEnumerable<Restoran>> PretraziRestorane(string naziv, string tip)
         {
-            return await _context.Restorani.Where(r => string.IsNullOrEmpty(naziv) || r.Ime.Contains(naziv)).ToListAsync();
+            //return await _context.Restorani
+            //    .Include(r => r.Jela)
+            //    .Where(r =>
+            //        (naziv == null || r.Ime.Contains(naziv, StringComparison.OrdinalIgnoreCase)) &&
+            //        (tip == null || r.Jela.Any(j => j.TipJela.Contains(tip, StringComparison.OrdinalIgnoreCase)))
+            //    )
+            //    .ToListAsync();
+
+
+            var query = _context.Restorani.AsQueryable();
+
+            // Apply filters if parameters are provided
+            if (!string.IsNullOrWhiteSpace(naziv))
+            {
+                query = query.Where(r => r.Ime.Contains(naziv));
+            }
+
+            if (!string.IsNullOrWhiteSpace(tip))
+            {
+                query = query.Where(r => r.Jela.Any(j => j.TipJela.Contains(tip)));
+            }
+
+            return await query.Include(r => r.Jela).ToListAsync();
+
         }
 
         public async Task<Restoran> VratiPoIdAsync(int id)
         {
-            
+
             return await _context.Restorani
-                         .Include(r => r.Jela)  
+                         .Include(r => r.Jela)
                          .Where(r => r.Id == id)
                          .FirstOrDefaultAsync();
         }
@@ -52,7 +75,7 @@ namespace DostavaHrane.Repozitorijum
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int restoranId)
         {
-            return await _context.Jela.Where(e=> e.Restoran.Id== restoranId).ToListAsync();
+            return await _context.Jela.Where(e => e.Restoran.Id == restoranId).ToListAsync();
         }
 
         public async Task<IEnumerable<Restoran>> VratiSveAsync()

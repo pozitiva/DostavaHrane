@@ -10,7 +10,7 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task<Restoran> VratiRestoranPoIdAsync(int id);
         Task<Restoran> UlogujRestoranAsync(KorisnikLoginDto restoranDto);
 
-        Task<IEnumerable<Restoran>> PretraziRestoranePoNazivu(string naziv);
+        Task<IEnumerable<Restoran>> PretraziRestorane(string naziv, string tip);
         // Task VratiJeloPoIdIZaRestoranAsync(int restoranId, int jeloId);
     }
 }
