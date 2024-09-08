@@ -16,19 +16,19 @@ namespace DostavaHrane.Repozitorijum
         public async Task DodajAsync(Jelo jelo)
         {
             _context.Jela.Add(jelo);
-            await _context.SaveChangesAsync();
+           
         }
 
         public async Task IzmeniAsync(Jelo jelo)
         {
             _context.Jela.Update(jelo);
-            await _context.SaveChangesAsync();
+          
         }
 
         public async Task ObrisiAsync(Jelo jelo)
         {
             _context.Jela.Remove(jelo);
-            await _context.SaveChangesAsync();
+           
         }
 
         public async Task<Jelo> VratiPoIdAsync(int id)

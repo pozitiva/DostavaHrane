@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DostavaHrane.Entiteti
 
@@ -19,6 +20,7 @@ namespace DostavaHrane.Entiteti
         public Adresa Adresa { get; set; }
         public int AdresaId { get; set; }
 
+        [JsonIgnore]
         public Musterija Musterija { get; set; }
         public int MusterijaId { get; set; }
 

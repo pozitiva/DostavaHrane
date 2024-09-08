@@ -17,13 +17,15 @@ namespace DostavaHrane.Kontroleri
     {
         private readonly IRestoranServis _restoranServis;
         private readonly IMusterijaServis _musterijaServis;
+        private readonly IAdminServis _adminServis;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public KorisnikKontroler(IMusterijaServis musterijaServis, IRestoranServis restoranServis, IMapper mapper, IConfiguration configuration)
+        public KorisnikKontroler(IMusterijaServis musterijaServis,IAdminServis adminServis, IRestoranServis restoranServis, IMapper mapper, IConfiguration configuration)
         {
             _musterijaServis = musterijaServis;
             _restoranServis = restoranServis;
+            _adminServis = adminServis;
             _mapper = mapper;
             _configuration = configuration;
 
@@ -79,6 +81,19 @@ namespace DostavaHrane.Kontroleri
             return Ok(new { rezultat, token });
         }
 
+        [HttpPost("admin/login")]
+        public async Task<IActionResult> AdminLogin(KorisnikLoginDto adminDto)
+        {
+            var rezultat = await _adminServis.UlogujAdminaAsync(adminDto);
+
+            if (rezultat == null)
+            {
+                return BadRequest("Neuspesno logovanje");
+            }
+
+            var token = GenerateJwtToken(rezultat.Id.ToString());
+            return Ok(new { rezultat, token });
+        }
         private string GenerateJwtToken(string username)
         {
             var claims = new[]

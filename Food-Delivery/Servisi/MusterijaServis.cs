@@ -13,10 +13,10 @@ namespace DostavaHrane.Servisi
     public class MusterijaServis : IMusterijaServis
     {
 
-        private readonly IMusterijaRepozitorijum _musterijaRepozitorijum;
-        public MusterijaServis(IMusterijaRepozitorijum musterijaRepozitorijum)
+        private readonly IUnitOfWork uow;
+        public MusterijaServis(IUnitOfWork unitOfWork)
         {
-            _musterijaRepozitorijum= musterijaRepozitorijum;
+            uow= unitOfWork;
         }
 
         public Task<Musterija> DodajMusterijuAsync()
@@ -26,7 +26,9 @@ namespace DostavaHrane.Servisi
 
         public async Task IzmeniMusterijuAsync(Musterija musterija)
         {
-            await _musterijaRepozitorijum.IzmeniAsync(musterija);
+
+            await uow.MusterijaRepozitorijum.IzmeniAsync(musterija);
+            await uow.SaveChanges();
 
         }
 
@@ -43,7 +45,7 @@ namespace DostavaHrane.Servisi
 
         public async Task<Musterija> VratiMusterijuPoIdAsync(int id)
         {
-            return await _musterijaRepozitorijum.VratiPoIdAsync(id);
+            return await uow.MusterijaRepozitorijum.VratiPoIdAsync(id);
         }
 
         public async Task<string> RegistrujMusterijuAsync(MusterijaRegistracijaDto musterija)
@@ -52,7 +54,7 @@ namespace DostavaHrane.Servisi
             {
                 return null;
             }
-            if (await _musterijaRepozitorijum.ProveraEmailaAsync(musterija.Email))
+            if (await uow.MusterijaRepozitorijum.ProveraEmailaAsync(musterija.Email))
             {
                 return "Nalog sa ovim emailom vec postoji!";
             }
@@ -72,11 +74,13 @@ namespace DostavaHrane.Servisi
                 Email = musterija.Email,
                 SifraHash = passwordHash,
                 SifraSalt = passwordSalt,
+                TipKorisnika= "musterija"
                 
             };
 
 
-            await _musterijaRepozitorijum.DodajAsync(novaMusterija);
+            await uow.MusterijaRepozitorijum.DodajAsync(novaMusterija);
+            await uow.SaveChanges();
             return "Uspesna registracija";
         }
 
@@ -94,7 +98,7 @@ namespace DostavaHrane.Servisi
 
         public async Task<Musterija> UlogujMusterijuAsync(KorisnikLoginDto musterija)
         {
-            Musterija novaMusterija = await _musterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
+            Musterija novaMusterija = await uow.MusterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
 
             if (!VerifyPasswordHash(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
             {
@@ -116,7 +120,7 @@ namespace DostavaHrane.Servisi
 
         public async Task<IEnumerable<Adresa>> VratiSveAdresePoMusterijiAsync(int id)
         {
-            return await _musterijaRepozitorijum.VratiSveAdresePoMusterijiAsync(id);
+            return await uow.MusterijaRepozitorijum.VratiSveAdresePoMusterijiAsync(id);
         }
     }
 }

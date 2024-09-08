@@ -26,7 +26,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveRestorane()
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var restorani = await _restoranServis.VratiSveRestoraneAsync();
             var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);
@@ -38,7 +38,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{restoranId}")]
         public async Task<IActionResult> VratiRestoranPoId(int restoranId)
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
 
@@ -53,7 +53,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{restoranId}/jela")]
         public async Task<IActionResult> VratiSvaJelaZaRestoran(int restoranId)
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var jela = await _restoranServis.VratiSvaJelaPoRestoranuAsync(restoranId);
             var jelaDto = _mapper.Map<List<JeloDto>>(jela);
@@ -66,7 +66,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("pretraga")]
         public async Task<IActionResult> PretraziRestoranePoNazivu([FromQuery(Name = "naziv")] string naziv = null, [FromQuery(Name ="tip")] string tip = null)
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var restorani = await _restoranServis.PretraziRestorane(naziv, tip);
             var restoraniDto = _mapper.Map<List<RestoranDto>>(restorani);

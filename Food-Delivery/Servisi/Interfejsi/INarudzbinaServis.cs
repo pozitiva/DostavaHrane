@@ -8,6 +8,7 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task AžurirajDostavljacaAsync(Dostavljac dostavljac);
         Task DodajNarudzbinuAsync(Narudzbina narudzbina);
         Task IzmeniNarudzbinuAsync(Narudzbina narudzbina);
+        Task<bool> izmeniStatusNarudzbineAsync(NarudzbinaDto narudzbinaDto);
         Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId);
         Task<Narudzbina> VratiNarudzbinuPoIdAsync(int narudzbinaId);
         Task<Dostavljac> VratiSlobodnogDostavljacaAsync();

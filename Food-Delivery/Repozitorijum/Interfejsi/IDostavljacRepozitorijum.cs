@@ -3,7 +3,7 @@ using DostavaHrane.Repozitorijum.Interfejsi;
 
 namespace DostavaHrane.Repozitorijum.Interfejsi
 {
-    public interface IDostavljacRepositorijum : IRepozitorijum<Dostavljac>
+    public interface IDostavljacRepozitorijum : IRepozitorijum<Dostavljac>
     {
         Task AzurirajDostavljacaAsync(Dostavljac dostavljac);
         Task<Dostavljac> VratiSlobodnogDostavljacaAsync();

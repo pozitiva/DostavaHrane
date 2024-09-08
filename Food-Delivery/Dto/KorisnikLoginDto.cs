@@ -9,5 +9,7 @@ namespace DostavaHrane.Dto
 
         [Required]
         public string Sifra { get; set; } = string.Empty;
+
+        public string TipKorisnika { get; set; } = string.Empty;
     }
 }

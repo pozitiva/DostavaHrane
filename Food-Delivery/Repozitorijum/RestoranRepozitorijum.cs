@@ -3,6 +3,7 @@ using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace DostavaHrane.Repozitorijum
 {
@@ -16,7 +17,6 @@ namespace DostavaHrane.Repozitorijum
         public async Task DodajAsync(Restoran restoran)
         {
             _context.Add(restoran);
-            await _context.SaveChangesAsync();
         }
 
         public Task IzmeniAsync(Restoran restoran)
@@ -82,5 +82,6 @@ namespace DostavaHrane.Repozitorijum
         {
             return await _context.Restorani.Include(r => r.Jela).ToListAsync();
         }
+
     }
 }

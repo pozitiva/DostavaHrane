@@ -27,7 +27,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajNarudzbinu( KreiranjeNarudzbineDto narudzbinaDto)
         {
-            var musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);  // 'sub' claim in JWT
+            var musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);  
 
             var narudzbina = new Narudzbina
             {
@@ -64,66 +64,24 @@ namespace DostavaHrane.Kontroleri
         [HttpPut]
         public async Task<IActionResult> IzmeniStatusNarudzbine([FromBody] NarudzbinaDto narudzbinaDto)
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
-            Narudzbina narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
-
-            if (narudzbina == null) return NotFound("Nije pronađena narudžbina");
-
-            if (narudzbina.Status.Equals("Na cekanju"))
+            if(restoranId != narudzbinaDto.Id)
             {
-                narudzbina.Status = "U pripremi";
-            }
-            else if (narudzbina.Status.Equals("U pripremi"))
-            {
-                
-                Dostavljac dostavljac = await _narudzbinaServis.VratiSlobodnogDostavljacaAsync();
-
-                if (dostavljac == null)
-                {
-                    return NotFound("Nije nađen slobodan dostavljac");
-                }
-
-                
-                narudzbina.Status = "Predato dostavljacu";
-                narudzbina.DostavljacId = dostavljac.Id;
-
-                
-                dostavljac.Slobodan = false;
-                await _narudzbinaServis.AžurirajDostavljacaAsync(dostavljac);
-            }
-            else if (narudzbina.Status == "Predato dostavljacu")
-            {
-                
-                Dostavljac dostavljac = await _narudzbinaServis.VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
-
-                if (dostavljac == null)
-                {
-                    return NotFound("Dostavljač nije pronađen");
-                }
-
-               
-                narudzbina.Status = "Dostavljeno";
-                dostavljac.Slobodan = true;
-                dostavljac.BrojDostava++;
-
-                await _narudzbinaServis.AžurirajDostavljacaAsync(dostavljac);
+                return Unauthorized();
             }
 
-            // Ažuriranje narudžbine u bazi podataka
-            await _narudzbinaServis.IzmeniNarudzbinuAsync(narudzbina);
+            bool rezultat = await _narudzbinaServis.izmeniStatusNarudzbineAsync(narudzbinaDto);
 
-            return Ok("Status narudžbine je uspešno izmenjen");
+            return rezultat? Ok("Status narudžbine je uspešno izmenjen") : BadRequest("Neuspeh");
         }
 
 
         [HttpGet]
         public async Task<IActionResult> VratiSveNarudzbineZaRestoran()
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
             var narudzbine = await _narudzbinaServis.VratiSveNarudzbinePoRestoranu(restoranId);
-
-            
 
             var narudzbineDto = _mapper.Map<List<NarudzbinaDto>>(narudzbine);
 
@@ -134,7 +92,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet("{narudzbinaId}")]
         public async Task<IActionResult> VratiNarudzbinuPoId(int narudzbinaId)
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var narudzbina = await _narudzbinaServis.VratiNarudzbinuPoIdAsync(narudzbinaId);
 

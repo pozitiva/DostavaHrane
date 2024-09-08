@@ -6,25 +6,27 @@ namespace DostavaHrane.Servisi
 {
     public class JeloServis : IJeloServis
     {
-        private readonly IJeloRepozitorijum _jeloRepozitorijum;
+        private readonly IUnitOfWork uow;
 
-        public JeloServis(IJeloRepozitorijum jeloRepozitorijum)
+        public JeloServis(IUnitOfWork unitOfWork)
         {
-            _jeloRepozitorijum = jeloRepozitorijum;
+            uow= unitOfWork;
         }
 
         public async Task DodajJeloAsync(Jelo jelo)
         {
 
-            await _jeloRepozitorijum.DodajAsync(jelo);
-            
+            await uow.JeloRepozitorijum.DodajAsync(jelo);
+            await uow.SaveChanges();
+
         }
 
         public async Task DodajJeloAsync(Jelo jelo, IFormFile? slika)
         {
             await sacuvajSliku(slika, jelo);
 
-            await _jeloRepozitorijum.DodajAsync(jelo);
+            await uow.JeloRepozitorijum.DodajAsync(jelo);
+            await uow.SaveChanges();
         }
 
         private async Task sacuvajSliku(IFormFile? slika, Jelo jelo)
@@ -45,27 +47,29 @@ namespace DostavaHrane.Servisi
 
         public async Task IzmeniJeloAsync(Jelo jelo)
         {
-            await _jeloRepozitorijum.IzmeniAsync(jelo);
+            await uow.JeloRepozitorijum.IzmeniAsync(jelo);
+            await uow.SaveChanges();
         }
 
         public async Task ObrisiJeloAsync(Jelo jelo)
         {
-            await _jeloRepozitorijum.ObrisiAsync(jelo);
+            await uow.JeloRepozitorijum.ObrisiAsync(jelo);
+            await uow.SaveChanges();
         }
 
         public async Task<Jelo> VratiJeloPoIdAsync(int jeloId)
         {
-            return await _jeloRepozitorijum.VratiPoIdAsync(jeloId);
+            return await uow.JeloRepozitorijum.VratiPoIdAsync(jeloId);
         }
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaAsync()
         {
-            return await _jeloRepozitorijum.VratiSveAsync();
+            return await uow.JeloRepozitorijum.VratiSveAsync();
         }
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranu(int restoranId)
         {
-           return await _jeloRepozitorijum.VratiSvaJelaPoRestoranu(restoranId);
+           return await uow.JeloRepozitorijum.VratiSvaJelaPoRestoranu(restoranId);
         }
 
     }

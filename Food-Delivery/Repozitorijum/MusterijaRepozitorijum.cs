@@ -17,7 +17,7 @@ namespace DostavaHrane.Repozitorijum
         public async Task DodajAsync(Musterija musterija)
         {
             _context.Musterije.Add(musterija);
-            await _context.SaveChangesAsync();
+            
         }
 
         public Task ObrisiAsync(Musterija musterija)
@@ -44,7 +44,6 @@ namespace DostavaHrane.Repozitorijum
         public async Task IzmeniAsync(Musterija musterija)
         {
             _context.Musterije.Update(musterija);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<Musterija> VratiMusterijuSaEmailom(KorisnikLoginDto musterija)
@@ -52,6 +51,7 @@ namespace DostavaHrane.Repozitorijum
 
             return await _context.Musterije
                      .Include(m => m.Adrese)
+                     .Include(m => m.Narudzbine)
                      .Where(u => u.Email == musterija.Email)
                      .FirstOrDefaultAsync();
 

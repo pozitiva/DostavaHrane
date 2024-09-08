@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DostavaHrane.Repozitorijum
 {
-    public class DostavljacRepozitorijum : IDostavljacRepositorijum
+    public class DostavljacRepozitorijum : IDostavljacRepozitorijum
     {
         private readonly DataContext _context;
 
@@ -17,7 +17,7 @@ namespace DostavaHrane.Repozitorijum
         public async Task AzurirajDostavljacaAsync(Dostavljac dostavljac)
         {
             _context.Dostavljaci.Update(dostavljac);
-            await _context.SaveChangesAsync();
+           
         }
 
         public Task DodajAsync(Dostavljac entity)

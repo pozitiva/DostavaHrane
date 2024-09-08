@@ -9,19 +9,21 @@ namespace DostavaHrane.Servisi
 {
     public class RestoranServis : IRestoranServis
     {
-        private readonly IRestoranRepozitorijum _restoranRepozitorijum;
+        private readonly IUnitOfWork uow;
+
         private readonly IMapper _mapper;
-        public RestoranServis(IRestoranRepozitorijum restoranRepozitorijum, IMapper mapper)
+        public RestoranServis(IUnitOfWork unitOfWork,  IMapper mapper)
         {
-            _restoranRepozitorijum = restoranRepozitorijum;
+            uow = unitOfWork;
+            
             _mapper = mapper;
         }
 
         public async Task<Restoran> UlogujRestoranAsync(KorisnikLoginDto restoran)
         {
-           Restoran noviRestoran = await _restoranRepozitorijum.VratiRestoranSaEmailom(restoran);
+            Restoran noviRestoran = await uow.RestoranRepozitorijum.VratiRestoranSaEmailom(restoran);
 
-            if (!VerifyPasswordHash(restoran.Sifra, noviRestoran.SifraHash, noviRestoran.SifraSalt))
+            if (restoran!=null && !VerifyPasswordHash(restoran.Sifra, noviRestoran.SifraHash, noviRestoran.SifraSalt))
             {
                 return null;
             }
@@ -41,22 +43,24 @@ namespace DostavaHrane.Servisi
 
         public async Task<Restoran> VratiRestoranPoIdAsync(int id)
         {
-            return await _restoranRepozitorijum.VratiPoIdAsync(id);
+            return await uow.RestoranRepozitorijum.VratiPoIdAsync(id);
         }
 
         public async Task<IEnumerable<Jelo>> VratiSvaJelaPoRestoranuAsync(int id)
         {
-            return await _restoranRepozitorijum.VratiSvaJelaPoRestoranuAsync(id);
+            return await uow.RestoranRepozitorijum.VratiSvaJelaPoRestoranuAsync(id);
         }
 
         public async Task<IEnumerable<Restoran>> VratiSveRestoraneAsync()
         {
-            return await _restoranRepozitorijum.VratiSveAsync();
+            return await uow.RestoranRepozitorijum.VratiSveAsync();
         }
 
         public async Task<IEnumerable<Restoran>> PretraziRestorane(string naziv, string tip)
         {
-            return await _restoranRepozitorijum.PretraziRestorane(naziv, tip);
+            return await uow.RestoranRepozitorijum.PretraziRestorane(naziv, tip);
         }
+
+   
     }
 }

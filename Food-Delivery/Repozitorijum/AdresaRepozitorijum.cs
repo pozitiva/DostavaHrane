@@ -19,13 +19,13 @@ namespace DostavaHrane.Repozitorijum
         public async Task DodajAsync(Adresa adresa)
         {
             await _context.Adrese.AddAsync(adresa);
-            await _context.SaveChangesAsync();
+            
         }
 
         public async Task ObrisiAsync(Adresa adresa)
         {
             _context.Adrese.Remove(adresa);
-            await _context.SaveChangesAsync();
+           
         }
 
         public async Task<Adresa> VratiPoIdAsync(int id)
@@ -36,7 +36,7 @@ namespace DostavaHrane.Repozitorijum
         public async Task IzmeniAsync(Adresa adresa)
         {
             _context.Adrese.Update(adresa);
-            await _context.SaveChangesAsync();
+           
         }
 
         public async Task<IEnumerable<Adresa>> VratiSveAdreseZaMusteriju(int musterijaId)

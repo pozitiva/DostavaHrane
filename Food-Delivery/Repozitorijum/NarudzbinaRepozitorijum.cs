@@ -16,19 +16,16 @@ namespace DostavaHrane.Repozitorijum
         public async Task DodajAsync(Narudzbina narudzbina)
         {
             _context.Add(narudzbina);
-            await _context.SaveChangesAsync();
         }
 
         public async Task DodajStavkuNarudzbineAsync(StavkaNarudzbine stavkaNarudzbine)
         {
             _context.Add(stavkaNarudzbine);
-            await _context.SaveChangesAsync();
         }
 
         public async Task IzmeniAsync(Narudzbina narudzbina)
         {
             _context.Update(narudzbina);
-            await _context.SaveChangesAsync();
         }
 
         public Task ObrisiAsync(Narudzbina entity)
@@ -54,7 +51,6 @@ namespace DostavaHrane.Repozitorijum
         public async Task AzurirajDostavljacaAsync(Dostavljac dostavljac)
         {
             _context.Dostavljaci.Update(dostavljac);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<Dostavljac> VratiSlobodnogDostavljacaAsync()
@@ -70,6 +66,7 @@ namespace DostavaHrane.Repozitorijum
                         .ThenInclude(s => s.Jelo)
                         .Include(n => n.Musterija)
                         .Include(n => n.Adresa)
+                        .Include(n => n.Dostavljac)
                         .Where(n => n.RestoranId == restoranId)
                         .ToListAsync();
         }

@@ -6,22 +6,22 @@ namespace DostavaHrane.Servisi
 {
     public class DostavljacServis : IDostavljacServis
     {
-        private readonly IDostavljacRepositorijum _dostavljacRepozitorijum;
+        private readonly IUnitOfWork uow;
 
-
-        public DostavljacServis(IDostavljacRepositorijum dostavljacRepozitorijum)
+        public DostavljacServis(IUnitOfWork unitOfWork)
         {
-            _dostavljacRepozitorijum = dostavljacRepozitorijum;
+            uow = unitOfWork;
 
         }
         public async Task AžurirajDostavljacaAsync(Dostavljac dostavljac)
         {
-            await _dostavljacRepozitorijum.AzurirajDostavljacaAsync(dostavljac);
+            await uow.DostavljacRepozitorijum.AzurirajDostavljacaAsync(dostavljac);
+            await uow.SaveChanges();
         }
 
         public async Task<Dostavljac> VratiSlobodnogDostavljacaAsync()
         {
-            return await _dostavljacRepozitorijum.VratiSlobodnogDostavljacaAsync();
+            return await uow.DostavljacRepozitorijum.VratiSlobodnogDostavljacaAsync();
         }
 
 

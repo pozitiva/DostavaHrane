@@ -6,6 +6,7 @@ using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Exchange.WebServices.Data;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -17,20 +18,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddScoped<IAdresaRepozitorijum, AdresaRepozitorijum>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<IAdresaServis, AdresaServis>();
-
-builder.Services.AddScoped<IMusterijaRepozitorijum, MusterijaRepozitorijum>();
 builder.Services.AddScoped<IMusterijaServis, MusterijaServis>();
-
-builder.Services.AddScoped<IJeloRepozitorijum, JeloRepozitorijum>();
 builder.Services.AddScoped<IJeloServis, JeloServis>();
-
-builder.Services.AddScoped<IRestoranRepozitorijum, RestoranRepozitorijum>();
 builder.Services.AddScoped<IRestoranServis, RestoranServis>();
-
-builder.Services.AddScoped<INarudzbinaRepozitorijum, NarudzbinaRepozitorijum>();
 builder.Services.AddScoped<INarudzbinaServis, NarudzbinaServis>();
+builder.Services.AddScoped<IAdminServis, AdminServis>();
+builder.Services.AddScoped<IDostavljacServis, DostavljacServis>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

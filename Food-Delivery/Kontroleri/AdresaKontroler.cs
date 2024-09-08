@@ -27,7 +27,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajAdresu(KreiranjeAdreseDto adresaDto)
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             if (!ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPut("{adresaId}")]
         public async Task<IActionResult> IzmeniAdresu([FromBody] AdresaDto izmenjenaAdresa)
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveAdreseZaMusteriju()
         {
-            int musterijaId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
             var adrese = await _adresaServis.VratiSveAdreseZaMusteriju(musterijaId);
 
 

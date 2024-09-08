@@ -20,7 +20,7 @@ namespace DostavaHrane.Data
         public DbSet<Narudzbina> Narudzbine { get; set; }
         public DbSet<Restoran> Restorani { get; set; }
         public DbSet<StavkaNarudzbine> StavkeNarudzbina { get; set; }
-
+       
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

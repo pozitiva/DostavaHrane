@@ -28,7 +28,7 @@ namespace DostavaHrane.Kontroleri
         [HttpGet]
         public async Task<IActionResult> VratiSveJelaZaRestoran()
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
             var jela = await _jeloServis.VratiSvaJelaPoRestoranu(restoranId);
 
 
@@ -41,7 +41,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost]
         public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string tipJela)
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             if (!ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace DostavaHrane.Kontroleri
         public async Task<IActionResult> IzmeniJelo([FromBody]  JeloDto izmenjenoJelo)
 
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace DostavaHrane.Kontroleri
         [HttpDelete("{jeloId}")]
         public async Task<IActionResult> ObrisiJelo(int jeloId)
         {
-            int restoranId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+            int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             if (!ModelState.IsValid)
             {
