@@ -1,4 +1,7 @@
-﻿namespace DostavaHrane.Repozitorijum.Interfejsi
+﻿
+using Microsoft.EntityFrameworkCore.Storage;
+
+namespace DostavaHrane.Repozitorijum.Interfejsi
 {
     public interface IUnitOfWork
     {
@@ -10,6 +13,6 @@
         IRestoranRepozitorijum RestoranRepozitorijum { get; }
         IAdminRepozitorijum AdminRepozitorijum { get; }
         Task SaveChanges();
-
+       
     }
 }

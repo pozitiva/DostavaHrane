@@ -61,14 +61,6 @@ namespace DostavaHrane.Servisi
             return await uow.RestoranRepozitorijum.PretraziRestorane(naziv, tip);
         }
 
-        public async Task DodajRestoranAsync(Restoran restoran, IFormFile? slika)
-        {
-            Restoran noviRestoran = await sacuvajSliku(slika, restoran);
-
-            await uow.RestoranRepozitorijum.DodajAsync(noviRestoran);
-            
-        }
-
         private async Task<Restoran> sacuvajSliku(IFormFile? slika, Restoran restoran)
         {
             if (slika != null && slika.Length != 0)
@@ -84,7 +76,9 @@ namespace DostavaHrane.Servisi
                 restoran.SlikaUrl = "/static/slike/restorani/"  + restoran.Ime + ".jpg";
             }
 
+
             return restoran;
+
         }
 
         public async Task obradiKreiranjeRestorana(IFormFile slika, string ime, string opis, string email, string sifra)
@@ -103,8 +97,8 @@ namespace DostavaHrane.Servisi
                 TipKorisnika = "restoran"
             };
 
-           
-            await DodajRestoranAsync(novRestoran, slika);
+            Restoran sacuvanRestoran = await sacuvajSliku(slika, novRestoran);
+            await uow.RestoranRepozitorijum.DodajAsync(sacuvanRestoran);
             await uow.SaveChanges();
 
         }

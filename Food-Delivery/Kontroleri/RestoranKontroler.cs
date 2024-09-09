@@ -85,7 +85,7 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
 
-             _restoranServis.obradiKreiranjeRestorana(slika, ime, opis, email, sifra);
+             await _restoranServis.obradiKreiranjeRestorana(slika, ime, opis, email, sifra);
 
             return Ok();
         }

@@ -16,13 +16,14 @@ namespace DostavaHrane.Servisi
 
         public async Task DodajJeloAsync(Jelo jelo, IFormFile? slika)
         {
-            await sacuvajSliku(slika, jelo);
+            Jelo sacuvanoJelo = await sacuvajSliku(slika, jelo);
 
             await uow.JeloRepozitorijum.DodajAsync(jelo);
+
             await uow.SaveChanges();
         }
 
-        private async Task sacuvajSliku(IFormFile? slika, Jelo jelo)
+        private async Task<Jelo> sacuvajSliku(IFormFile? slika, Jelo jelo)
         {
             if (slika != null && slika.Length != 0)
             {
@@ -35,6 +36,8 @@ namespace DostavaHrane.Servisi
 
                 jelo.SlikaUrl = "/static/slike/jela/" + jelo.RestoranId + "_" + jelo.Naziv + ".jpg";
             }
+
+            return jelo;
         }
 
         public async Task IzmeniJeloAsync(Jelo jelo)

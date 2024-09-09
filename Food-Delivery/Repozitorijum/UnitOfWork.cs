@@ -1,5 +1,6 @@
 ﻿using DostavaHrane.Data;
 using DostavaHrane.Repozitorijum.Interfejsi;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DostavaHrane.Repozitorijum
 {
@@ -40,5 +41,7 @@ namespace DostavaHrane.Repozitorijum
         public IAdminRepozitorijum AdminRepozitorijum => _adminRepozitorijum.Value;
 
         public async Task SaveChanges() => await _context.SaveChangesAsync();
+
+
     }
 }
