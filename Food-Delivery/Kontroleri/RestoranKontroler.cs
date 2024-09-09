@@ -2,6 +2,7 @@
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Filteri;
+using DostavaHrane.Servisi;
 using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,25 +75,20 @@ namespace DostavaHrane.Kontroleri
             return Ok(restoraniDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> KreirajRestoran([FromForm] IFormFile slika, [FromForm] string ime, [FromForm] string opis, [FromForm] string email, [FromForm] string sifra)
+        {
+            //int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
-        //[HttpGet("{restoranId}/jela/{jeloId}")]
-        //public async Task<IActionResult> VratiJeloZaRestoran(int restoranId, int jeloId)
-        //{
-        //    var restoran = await _restoranServis.VratiRestoranPoIdAsync(restoranId);
-        //    if (restoran == null)
-        //    {
-        //        return NotFound("Restoran nije pronađen");
-        //    }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    //var jelo = await _restoranServis.VratiJeloPoIdIZaRestoranAsync(restoranId, jeloId);
-        //    if (jelo == null)
-        //    {
-        //        return NotFound("Jelo nije pronađeno u ovom restoranu");
-        //    }
+             _restoranServis.obradiKreiranjeRestorana(slika, ime, opis, email, sifra);
 
-        //    var jeloDto = _mapper.Map<JeloDto>(jelo);
-        //    return Ok(jeloDto);
-        //}
+            return Ok();
+        }
 
 
 

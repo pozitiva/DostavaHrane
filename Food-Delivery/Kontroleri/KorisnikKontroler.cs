@@ -91,8 +91,8 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest("Neuspesno logovanje");
             }
 
-            var token = GenerateJwtToken(rezultat.Id.ToString());
-            return Ok(new { rezultat, token });
+            //var token = GenerateJwtToken(rezultat.Id.ToString());
+            return Ok( rezultat);
         }
         private string GenerateJwtToken(string username)
         {

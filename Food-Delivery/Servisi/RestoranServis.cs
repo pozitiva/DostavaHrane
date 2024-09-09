@@ -61,6 +61,65 @@ namespace DostavaHrane.Servisi
             return await uow.RestoranRepozitorijum.PretraziRestorane(naziv, tip);
         }
 
-   
+        public async Task DodajRestoranAsync(Restoran restoran, IFormFile? slika)
+        {
+            Restoran noviRestoran = await sacuvajSliku(slika, restoran);
+
+            await uow.RestoranRepozitorijum.DodajAsync(noviRestoran);
+            
+        }
+
+        private async Task<Restoran> sacuvajSliku(IFormFile? slika, Restoran restoran)
+        {
+            if (slika != null && slika.Length != 0)
+            {
+                //File.Delete("static/slike/jela/" + jelo.RestoranId + "_" + jelo.Naziv + ".jpg");
+                var path = Path.Combine("static/slike/restorani", restoran.Ime + ".jpg");
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await slika.CopyToAsync(stream);
+                }
+
+                restoran.SlikaUrl = "/static/slike/restorani/"  + restoran.Ime + ".jpg";
+            }
+
+            return restoran;
+        }
+
+        public async Task obradiKreiranjeRestorana(IFormFile slika, string ime, string opis, string email, string sifra)
+        {
+            KreirajSifraHash(sifra,
+                 out byte[] passwordHash,
+                 out byte[] passwordSalt);
+
+            var novRestoran = new Restoran
+            {
+                Ime = ime,
+                Opis = opis,
+                Email = email,
+                SifraHash = passwordHash,
+                SifraSalt = passwordSalt,
+                TipKorisnika = "restoran"
+            };
+
+           
+            await DodajRestoranAsync(novRestoran, slika);
+            await uow.SaveChanges();
+
+        }
+
+
+        private void KreirajSifraHash(string sifra, out byte[] sifraHash, out byte[] sifraSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                sifraSalt = hmac.Key;
+                sifraHash = hmac
+                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(sifra));
+            }
+        }
     }
+
+
 }

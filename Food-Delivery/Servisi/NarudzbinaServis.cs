@@ -12,24 +12,14 @@ namespace DostavaHrane.Servisi
     public class NarudzbinaServis : INarudzbinaServis
     {
         private readonly IUnitOfWork uow;
+        private readonly IDostavljacServis _dostavljacServis;
 
-
-        public NarudzbinaServis(IUnitOfWork unitOfWork)
+        public NarudzbinaServis(IUnitOfWork unitOfWork, IDostavljacServis dostavljacServis)
         {
            uow= unitOfWork;
-            
+            _dostavljacServis = dostavljacServis;
         }
 
-        public async Task AžurirajDostavljacaAsync(Dostavljac dostavljac)
-        {
-            await uow.NarudzbinaRepozitorijum.AzurirajDostavljacaAsync(dostavljac);
-            await uow.SaveChanges();
-        }
-
-        public async Task<Dostavljac> VratiSlobodnogDostavljacaAsync()
-        {
-            return await uow.NarudzbinaRepozitorijum.VratiSlobodnogDostavljacaAsync();
-        }
         public async Task DodajNarudzbinuAsync(Narudzbina narudzbina)
         {
             await uow.NarudzbinaRepozitorijum.DodajAsync(narudzbina);
@@ -54,10 +44,6 @@ namespace DostavaHrane.Servisi
             return await uow.NarudzbinaRepozitorijum.VratiSveNarudzbinePoRestoranuAsync(restoranId);
         }
 
-        public async Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId)
-        {
-            return await uow.NarudzbinaRepozitorijum.VratiDostavljacaPoIdAsync(dostavljacId);
-        }
 
         public async Task<bool> izmeniStatusNarudzbineAsync(NarudzbinaDto narudzbinaDto)
         {
@@ -72,39 +58,36 @@ namespace DostavaHrane.Servisi
             else if (narudzbina.Status.Equals("U pripremi"))
             {
 
-                Dostavljac dostavljac = await VratiSlobodnogDostavljacaAsync();
+                Dostavljac dostavljac = await _dostavljacServis.VratiSlobodnogDostavljacaAsync();
 
                 if (dostavljac == null)
                 {
                     return false;
                 }
-
 
                 narudzbina.Status = "Predato dostavljacu";
                 narudzbina.DostavljacId = dostavljac.Id;
 
-
                 dostavljac.Slobodan = false;
-                await AžurirajDostavljacaAsync(dostavljac);
+                await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
             }
             else if (narudzbina.Status == "Predato dostavljacu")
             {
 
-                Dostavljac dostavljac = await VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
+                Dostavljac dostavljac = await _dostavljacServis.VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
 
                 if (dostavljac == null)
                 {
                     return false;
                 }
-
 
                 narudzbina.Status = "Dostavljeno";
                 dostavljac.Slobodan = true;
                 dostavljac.BrojDostava++;
 
-                await AžurirajDostavljacaAsync(dostavljac);
-                await uow.SaveChanges();
-                return true;
+                await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
+               
+               
             }
 
             await IzmeniNarudzbinuAsync(narudzbina);

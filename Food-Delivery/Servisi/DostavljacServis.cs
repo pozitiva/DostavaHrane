@@ -1,4 +1,5 @@
-﻿using DostavaHrane.Entiteti;
+﻿using DostavaHrane.Dto;
+using DostavaHrane.Entiteti;
 using DostavaHrane.Repozitorijum.Interfejsi;
 using DostavaHrane.Servisi.Interfejsi;
 
@@ -17,6 +18,19 @@ namespace DostavaHrane.Servisi
         {
             await uow.DostavljacRepozitorijum.AzurirajDostavljacaAsync(dostavljac);
             await uow.SaveChanges();
+
+        }
+
+        public async Task<string> KreirajDostavljaca(Dostavljac dostavljac)
+        {
+            await uow.DostavljacRepozitorijum.DodajAsync(dostavljac);
+            await uow.SaveChanges();
+            return "Uspesna registracija";
+        }
+
+        public async Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId)
+        {
+            return await uow.DostavljacRepozitorijum.VratiDostavljacaPoIdAsync(dostavljacId);
         }
 
         public async Task<Dostavljac> VratiSlobodnogDostavljacaAsync()

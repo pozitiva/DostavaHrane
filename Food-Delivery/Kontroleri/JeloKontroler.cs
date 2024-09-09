@@ -57,7 +57,6 @@ namespace DostavaHrane.Kontroleri
         }
 
         [HttpPut]
-
         public async Task<IActionResult> IzmeniJelo([FromBody]  JeloDto izmenjenoJelo)
 
         {

@@ -37,6 +37,11 @@ namespace DostavaHrane.Helper
             CreateMap<Musterija, MusterijaDto>();   
             CreateMap<MusterijaDto, Musterija>();
 
+            CreateMap<Dostavljac, DostavljacDto>();
+            CreateMap<DostavljacDto, Dostavljac>();
+
+
+
         }
     }
 }

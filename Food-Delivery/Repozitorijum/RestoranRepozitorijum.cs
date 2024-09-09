@@ -16,7 +16,7 @@ namespace DostavaHrane.Repozitorijum
         }
         public async Task DodajAsync(Restoran restoran)
         {
-            _context.Add(restoran);
+             _context.Restorani.Add(restoran);
         }
 
         public Task IzmeniAsync(Restoran restoran)

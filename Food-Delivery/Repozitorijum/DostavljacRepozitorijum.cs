@@ -17,12 +17,11 @@ namespace DostavaHrane.Repozitorijum
         public async Task AzurirajDostavljacaAsync(Dostavljac dostavljac)
         {
             _context.Dostavljaci.Update(dostavljac);
-           
         }
 
-        public Task DodajAsync(Dostavljac entity)
+        public async Task DodajAsync(Dostavljac entity)
         {
-            throw new NotImplementedException();
+            _context.Dostavljaci.Add(entity);
         }
 
         public Task IzmeniAsync(Dostavljac entity)
@@ -33,6 +32,11 @@ namespace DostavaHrane.Repozitorijum
         public Task ObrisiAsync(Dostavljac entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId)
+        {
+            return await _context.Set<Dostavljac>().FindAsync(dostavljacId);
         }
 
         public Task<Dostavljac> VratiPoIdAsync(int id)

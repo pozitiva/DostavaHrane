@@ -13,13 +13,6 @@ namespace DostavaHrane.Servisi
             uow= unitOfWork;
         }
 
-        public async Task DodajJeloAsync(Jelo jelo)
-        {
-
-            await uow.JeloRepozitorijum.DodajAsync(jelo);
-            await uow.SaveChanges();
-
-        }
 
         public async Task DodajJeloAsync(Jelo jelo, IFormFile? slika)
         {
@@ -33,7 +26,6 @@ namespace DostavaHrane.Servisi
         {
             if (slika != null && slika.Length != 0)
             {
-                //File.Delete("static/slike/jela/" + jelo.RestoranId + "_" + jelo.Naziv + ".jpg");
                 var path = Path.Combine("static/slike/jela", jelo.RestoranId + "_" + jelo.Naziv + ".jpg");
 
                 using (var stream = new FileStream(path, FileMode.Create))

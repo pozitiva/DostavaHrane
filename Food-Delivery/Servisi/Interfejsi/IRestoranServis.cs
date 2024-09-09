@@ -11,6 +11,7 @@ namespace DostavaHrane.Servisi.Interfejsi
         Task<Restoran> UlogujRestoranAsync(KorisnikLoginDto restoranDto);
 
         Task<IEnumerable<Restoran>> PretraziRestorane(string naziv, string tip);
-        // Task VratiJeloPoIdIZaRestoranAsync(int restoranId, int jeloId);
+        Task DodajRestoranAsync(Restoran restoran, IFormFile slika);
+        Task obradiKreiranjeRestorana(IFormFile slika, string ime, string opis, string email, string sifra);
     }
 }

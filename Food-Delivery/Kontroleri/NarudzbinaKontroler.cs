@@ -66,7 +66,7 @@ namespace DostavaHrane.Kontroleri
         {
             int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
-            if(restoranId != narudzbinaDto.Id)
+            if(restoranId != narudzbinaDto.RestoranId)
             {
                 return Unauthorized();
             }
