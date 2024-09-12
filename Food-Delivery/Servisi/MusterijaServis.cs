@@ -100,7 +100,7 @@ namespace DostavaHrane.Servisi
         {
             Musterija novaMusterija = await uow.MusterijaRepozitorijum.VratiMusterijuSaEmailom(musterija);
 
-            if (!VerifyPasswordHash(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
+            if (!VerifikujSifru(musterija.Sifra, novaMusterija.SifraHash, novaMusterija.SifraSalt))
             {
                 return null;
             }
@@ -108,7 +108,7 @@ namespace DostavaHrane.Servisi
             return novaMusterija;
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private bool VerifikujSifru(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {

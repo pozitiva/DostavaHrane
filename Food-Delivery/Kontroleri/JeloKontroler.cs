@@ -39,7 +39,7 @@ namespace DostavaHrane.Kontroleri
 
 
         [HttpPost]
-        public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string tipJela)
+        public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string opis, [FromForm] string tipJela)
         {
             int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
@@ -48,7 +48,7 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
 
-            Jelo jelo = new Jelo { Naziv = naziv, Cena = cena, TipJela = tipJela, RestoranId = restoranId };
+            Jelo jelo = new Jelo { Naziv = naziv, Cena = cena, Opis= opis, TipJela = tipJela, RestoranId = restoranId };
 
 
             await _jeloServis.DodajJeloAsync(jelo, slika);

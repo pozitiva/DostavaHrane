@@ -9,10 +9,6 @@ namespace DostavaHrane.Dto
 
         public int Id { get; set; }
         public string SlikaUrl { get; set; }
-
-        //public Dostavljac Dostavljac { get; set; }
-        //public Restoran Restoran { get; set; }
-        //public Adresa Adresa { get; set; }
         public ICollection<JeloDto> Jela { get; set; }
 
     }

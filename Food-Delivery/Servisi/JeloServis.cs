@@ -16,14 +16,14 @@ namespace DostavaHrane.Servisi
 
         public async Task DodajJeloAsync(Jelo jelo, IFormFile? slika)
         {
-            Jelo sacuvanoJelo = await sacuvajSliku(slika, jelo);
+            Jelo sacuvanoJelo = await  SacuvajSliku(slika, jelo);
 
             await uow.JeloRepozitorijum.DodajAsync(jelo);
 
             await uow.SaveChanges();
         }
 
-        private async Task<Jelo> sacuvajSliku(IFormFile? slika, Jelo jelo)
+        private async Task<Jelo> SacuvajSliku(IFormFile? slika, Jelo jelo)
         {
             if (slika != null && slika.Length != 0)
             {
