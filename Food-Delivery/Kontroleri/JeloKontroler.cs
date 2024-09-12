@@ -36,7 +36,7 @@ namespace DostavaHrane.Kontroleri
 
 
         [HttpPost]
-        public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena, [FromForm] string opis, [FromForm] string tipJela)
+        public async Task<IActionResult> KreirajJelo([FromForm] IFormFile slika, [FromForm] string naziv, [FromForm] decimal cena,  [FromForm] string tipJela, [FromForm] string opis)
         {
             int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 

@@ -63,22 +63,23 @@ namespace DostavaHrane.Servisi
             return await uow.RestoranRepozitorijum.PretraziRestorane(naziv, tip);
         }
 
-        private async Task<Restoran> SacuvajSliku(IFormFile? slika, Restoran restoran)
+
+        private async Task SacuvajSliku(IFormFile? slika, Restoran restoran)
         {
+
             if (slika != null && slika.Length != 0)
             {
-                var path = Path.Combine("static/slike/restorani", restoran.Ime + ".jpg");
+                var basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "DostavaHrane.InfrastrukturniSloj", "Podaci", "static", "slike", "restorani"));
+                var path = Path.Combine(basePath, restoran.Ime + ".jpg");
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await slika.CopyToAsync(stream);
                 }
 
-                restoran.SlikaUrl = "/static/slike/restorani/"  + restoran.Ime + ".jpg";
+                restoran.SlikaUrl = "/static/slike/restorani/" + restoran.Ime + ".jpg";
             }
 
-
-            return restoran;
 
         }
 
@@ -98,8 +99,8 @@ namespace DostavaHrane.Servisi
                 TipKorisnika = "restoran"
             };
 
-            Restoran sacuvanRestoran = await SacuvajSliku(slika, novRestoran);
-            await uow.RestoranRepozitorijum.DodajAsync(sacuvanRestoran);
+            await SacuvajSliku(slika, novRestoran);
+            await uow.RestoranRepozitorijum.DodajAsync(novRestoran);
             await uow.SaveChanges();
 
         }

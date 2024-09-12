@@ -17,28 +17,30 @@ namespace DostavaHrane.Servisi
 
         public async Task DodajJeloAsync(Jelo jelo, IFormFile? slika)
         {
-            Jelo sacuvanoJelo = await  SacuvajSliku(slika, jelo);
+            await  SacuvajSliku(slika, jelo);
 
             await uow.JeloRepozitorijum.DodajAsync(jelo);
 
             await uow.SaveChanges();
         }
 
-        private async Task<Jelo> SacuvajSliku(IFormFile? slika, Jelo jelo)
+        private async Task SacuvajSliku(IFormFile? slika, Jelo jelo)
         {
+           
             if (slika != null && slika.Length != 0)
-            {
-                var path = Path.Combine("static/slike/jela", jelo.RestoranId + "_" + jelo.Naziv + ".jpg");
-
-                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await slika.CopyToAsync(stream);
-                }
+                    var basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..",  "DostavaHrane.InfrastrukturniSloj", "Podaci", "static", "slike", "jela"));
+                    var path = Path.Combine(basePath, jelo.RestoranId + "_" + jelo.Naziv + ".jpg");
 
-                jelo.SlikaUrl = "/static/slike/jela/" + jelo.RestoranId + "_" + jelo.Naziv + ".jpg";
-            }
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await slika.CopyToAsync(stream);
+                    }
 
-            return jelo;
+                    jelo.SlikaUrl = "/static/slike/jela/" + jelo.RestoranId + "_" + jelo.Naziv + ".jpg";
+             }
+            
+
         }
 
         public async Task IzmeniJeloAsync(Jelo jelo)
