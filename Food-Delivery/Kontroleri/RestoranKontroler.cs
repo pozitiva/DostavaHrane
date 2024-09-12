@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
+using DostavaHrane.AplikacioniSloj.Interfejsi;
 using DostavaHrane.Dto;
-using DostavaHrane.Entiteti;
-using DostavaHrane.Filteri;
-using DostavaHrane.Servisi;
-using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

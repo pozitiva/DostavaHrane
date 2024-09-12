@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using DostavaHrane.AplikacioniSloj.Interfejsi;
 using DostavaHrane.Dto;
-using DostavaHrane.Servisi.Interfejsi;
+using DostavaHrane.Entiteti;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,15 +18,13 @@ namespace DostavaHrane.Kontroleri
         private readonly IRestoranServis _restoranServis;
         private readonly IMusterijaServis _musterijaServis;
         private readonly IAdminServis _adminServis;
-        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public KorisnikKontroler(IMusterijaServis musterijaServis,IAdminServis adminServis, IRestoranServis restoranServis, IMapper mapper, IConfiguration configuration)
+        public KorisnikKontroler(IMusterijaServis musterijaServis,IAdminServis adminServis, IRestoranServis restoranServis,  IConfiguration configuration)
         {
             _musterijaServis = musterijaServis;
             _restoranServis = restoranServis;
             _adminServis = adminServis;
-            _mapper = mapper;
             _configuration = configuration;
 
         }
@@ -54,6 +53,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost("musterija/login")]
         public async Task<IActionResult> MusterijaLogin(KorisnikLoginDto musterijaDto)
         {
+            
             var rezultat = await _musterijaServis.UlogujMusterijuAsync(musterijaDto);
 
             if (rezultat == null)

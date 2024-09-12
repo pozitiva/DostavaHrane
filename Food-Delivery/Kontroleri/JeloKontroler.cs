@@ -1,12 +1,9 @@
 ﻿using DostavaHrane.Entiteti;
-using DostavaHrane.Servisi.Interfejsi;
-using DostavaHrane.Servisi;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using DostavaHrane.Dto;
-using System.Diagnostics.Metrics;
-using DostavaHrane.Filteri;
 using Microsoft.AspNetCore.Authorization;
+using DostavaHrane.AplikacioniSloj.Interfejsi;
 
 namespace DostavaHrane.Kontroleri
 {

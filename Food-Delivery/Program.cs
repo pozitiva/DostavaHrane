@@ -1,9 +1,9 @@
+using DostavaHrane.AplikacioniSloj.Interfejsi;
 using DostavaHrane.Data;
-using DostavaHrane.Entiteti;
-using DostavaHrane.Repozitorijum;
-using DostavaHrane.Repozitorijum.Interfejsi;
+using DostavaHrane.Helper;
+using DostavaHrane.InfrastrukturniSloj.Podaci;
+using DostavaHrane.Interfejsi;
 using DostavaHrane.Servisi;
-using DostavaHrane.Servisi.Interfejsi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Exchange.WebServices.Data;
@@ -16,7 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+//builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -81,7 +82,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "static")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "..", "DostavaHrane.InfrastrukturniSloj", "Podaci","static")),
     RequestPath = "/static"
 });
 
