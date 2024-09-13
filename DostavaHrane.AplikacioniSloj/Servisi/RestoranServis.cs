@@ -20,29 +20,6 @@ namespace DostavaHrane.Servisi
             _mapper = mapper;
         }
 
-        public async Task<Restoran> UlogujRestoranAsync(KorisnikLoginDto restoranDto)
-        {
-            var restoran = _mapper.Map<Restoran>(restoranDto);
-            Restoran noviRestoran = await uow.RestoranRepozitorijum.VratiRestoranSaEmailom(restoran);
-
-            if (restoran!=null && !VerifyPasswordHash(restoranDto.Sifra, noviRestoran.SifraHash, noviRestoran.SifraSalt))
-            {
-                return null;
-            }
-
-            return noviRestoran;
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac
-                    .ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
-            }
-        }
-
         public async Task<Restoran> VratiRestoranPoIdAsync(int id)
         {
             return await uow.RestoranRepozitorijum.VratiPoIdAsync(id);

@@ -26,7 +26,7 @@ builder.Services.AddScoped<IMusterijaServis, MusterijaServis>();
 builder.Services.AddScoped<IJeloServis, JeloServis>();
 builder.Services.AddScoped<IRestoranServis, RestoranServis>();
 builder.Services.AddScoped<INarudzbinaServis, NarudzbinaServis>();
-builder.Services.AddScoped<IAdminServis, AdminServis>();
+builder.Services.AddScoped<IAdminServis, AuthServis>();
 builder.Services.AddScoped<IDostavljacServis, DostavljacServis>();
 
 builder.Services.AddEndpointsApiExplorer();

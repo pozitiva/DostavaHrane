@@ -15,16 +15,13 @@ namespace DostavaHrane.Kontroleri
     [ApiController]
     public class KorisnikKontroler:ControllerBase
     {
-        private readonly IRestoranServis _restoranServis;
-        private readonly IMusterijaServis _musterijaServis;
-        private readonly IAdminServis _adminServis;
+ 
+        private readonly IAuthServis _authServis;
         private readonly IConfiguration _configuration;
 
-        public KorisnikKontroler(IMusterijaServis musterijaServis,IAdminServis adminServis, IRestoranServis restoranServis,  IConfiguration configuration)
+        public KorisnikKontroler(IAuthServis authServis, IConfiguration configuration)
         {
-            _musterijaServis = musterijaServis;
-            _restoranServis = restoranServis;
-            _adminServis = adminServis;
+      
             _configuration = configuration;
 
         }
@@ -37,9 +34,7 @@ namespace DostavaHrane.Kontroleri
                 return BadRequest(ModelState);
             }
 
-            //var musterija = _mapper.Map<Musterija>(musterijaDto);
-
-            string rezultat = await _musterijaServis.RegistrujMusterijuAsync(musterijaDto);
+            string rezultat = await _authServis.RegistrujMusterijuAsync(musterijaDto);
 
             if (rezultat == "Nalog sa ovim emailom vec postoji!" || rezultat == "Unete sifre se ne podudaraju")
             {
@@ -54,7 +49,7 @@ namespace DostavaHrane.Kontroleri
         public async Task<IActionResult> MusterijaLogin(KorisnikLoginDto musterijaDto)
         {
             
-            var rezultat = await _musterijaServis.UlogujMusterijuAsync(musterijaDto);
+            var rezultat = await _authServis.UlogujMusterijuAsync(musterijaDto);
 
             if (rezultat == null)
             {
@@ -69,7 +64,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost("restoran/login")]
         public async Task<IActionResult> RestoranLogin(KorisnikLoginDto restoranDto)
         {
-            var rezultat = await _restoranServis.UlogujRestoranAsync(restoranDto);
+            var rezultat = await _authServis.UlogujRestoranAsync(restoranDto);
 
             if (rezultat == null)
             {
@@ -83,7 +78,7 @@ namespace DostavaHrane.Kontroleri
         [HttpPost("admin/login")]
         public async Task<IActionResult> AdminLogin(KorisnikLoginDto adminDto)
         {
-            var rezultat = await _adminServis.UlogujAdminaAsync(adminDto);
+            var rezultat = await _authServis.UlogujAdminaAsync(adminDto);
 
             if (rezultat == null)
             {
