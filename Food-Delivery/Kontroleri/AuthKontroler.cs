@@ -21,7 +21,7 @@ namespace DostavaHrane.Kontroleri
 
         public KorisnikKontroler(IAuthServis authServis, IConfiguration configuration)
         {
-      
+            _authServis = authServis;
             _configuration = configuration;
 
         }

@@ -51,6 +51,7 @@ namespace DostavaHrane.Repozitorijum
             return await _context.Musterije
                      .Include(m => m.Adrese)
                      .Include(m => m.Narudzbine)
+                     .ThenInclude(n => n.StavkeNarudzbine)
                      .Where(u => u.Email == musterija.Email)
                      .FirstOrDefaultAsync();
 

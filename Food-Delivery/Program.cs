@@ -6,7 +6,6 @@ using DostavaHrane.Interfejsi;
 using DostavaHrane.Servisi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Exchange.WebServices.Data;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -26,7 +25,7 @@ builder.Services.AddScoped<IMusterijaServis, MusterijaServis>();
 builder.Services.AddScoped<IJeloServis, JeloServis>();
 builder.Services.AddScoped<IRestoranServis, RestoranServis>();
 builder.Services.AddScoped<INarudzbinaServis, NarudzbinaServis>();
-builder.Services.AddScoped<IAdminServis, AuthServis>();
+builder.Services.AddScoped<IAuthServis, AuthServis>();
 builder.Services.AddScoped<IDostavljacServis, DostavljacServis>();
 
 builder.Services.AddEndpointsApiExplorer();

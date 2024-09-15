@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DostavaHrane.AplikacioniSloj.Dto;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 
@@ -31,8 +32,9 @@ namespace DostavaHrane.Helper
 
             CreateMap<KorisnikLoginDto, Restoran>()
             .IncludeBase<KorisnikLoginDto, Korisnik>();
-            
 
+
+            CreateMap<MusterijaIzmenaDto, Musterija>();
 
             CreateMap<StavkaNarudzbineDto, StavkaNarudzbine>();
 
