@@ -57,6 +57,7 @@ namespace DostavaHrane.Repozitorijum
                         .Include(n => n.Adresa)
                         .Include(n => n.Dostavljac)
                         .Where(n => n.RestoranId == restoranId)
+                        .OrderBy(n => n.Status)
                         .ToListAsync();
         }
     }

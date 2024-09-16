@@ -1,4 +1,6 @@
-﻿namespace DostavaHrane.Entiteti
+﻿using System.Text.Json.Serialization;
+
+namespace DostavaHrane.Entiteti
 {
     public class Jelo
     {
@@ -12,6 +14,7 @@
         public Restoran? Restoran { get; set; }
         public int RestoranId { get; set; }
 
+        [JsonIgnore]
         public ICollection<StavkaNarudzbine>? StavkeNarudzbine { get; set; }
      }
 }

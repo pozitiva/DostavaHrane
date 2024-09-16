@@ -48,11 +48,9 @@ namespace DostavaHrane.Servisi
 
             if (narudzbina == null) return false;
 
-            if (narudzbina.Status.Equals("Na cekanju"))
-            {
-                narudzbina.Status = "U pripremi";
-            }
-            else if (narudzbina.Status.Equals("U pripremi"))
+            narudzbina.Status = narudzbinaDto.Status;
+
+            if (narudzbina.Status == "Predato dostavljacu")
             {
 
                 Dostavljac dostavljac = await _dostavljacServis.VratiSlobodnogDostavljacaAsync();
@@ -62,13 +60,13 @@ namespace DostavaHrane.Servisi
                     return false;
                 }
 
-                narudzbina.Status = "Predato dostavljacu";
+          
                 narudzbina.DostavljacId = dostavljac.Id;
-
                 dostavljac.Slobodan = false;
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
             }
-            else if (narudzbina.Status == "Predato dostavljacu")
+           
+            if (narudzbina.Status == "Dostavljeno")
             {
 
                 Dostavljac dostavljac = await _dostavljacServis.VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
@@ -78,12 +76,10 @@ namespace DostavaHrane.Servisi
                     return false;
                 }
 
-                narudzbina.Status = "Dostavljeno";
                 dostavljac.Slobodan = true;
                 dostavljac.BrojDostava++;
 
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
-               
                
             }
 

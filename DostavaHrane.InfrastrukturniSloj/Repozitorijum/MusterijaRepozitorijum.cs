@@ -52,6 +52,9 @@ namespace DostavaHrane.Repozitorijum
                      .Include(m => m.Adrese)
                      .Include(m => m.Narudzbine)
                      .ThenInclude(n => n.StavkeNarudzbine)
+                     .ThenInclude(s => s.Jelo)
+                      .Include(m => m.Narudzbine)
+                     .ThenInclude(n => n.Restoran)
                      .Where(u => u.Email == musterija.Email)
                      .FirstOrDefaultAsync();
 

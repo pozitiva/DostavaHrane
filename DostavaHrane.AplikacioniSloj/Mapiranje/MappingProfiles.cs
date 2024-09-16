@@ -14,13 +14,19 @@ namespace DostavaHrane.Helper
 
             CreateMap<Restoran, RestoranDto>();
 
+            CreateMap<StavkaNarudzbine, StavkaNarudzbineDto>()
+            .ForMember(dest => dest.JeloIme, opt => opt.MapFrom(src => src.Jelo.Naziv));
+            //.ForMember(dest => dest.Kolicina, opt => opt.MapFrom(src => src.Kolicina));
+
             CreateMap<Narudzbina, NarudzbinaDto>()
            .ForMember(dest => dest.Adresa, opt => opt.MapFrom(src => src.Adresa.Ulica))  
            .ForMember(dest => dest.MusterijaIme, opt => opt.MapFrom(src => src.Musterija.Ime))
-           .ForMember(dest => dest.DostavljacIme, opt => opt.MapFrom(src => src.Dostavljac.Ime));
+           .ForMember(dest => dest.DostavljacIme, opt => opt.MapFrom(src => src.Dostavljac.Ime))
+           .ForMember(dest => dest.RestoranIme, opt => opt.MapFrom(src => src.Restoran.Ime))
+            .ForMember(dest => dest.StavkeNarudzbine, opt => opt.MapFrom(src => src.StavkeNarudzbine));
 
-            CreateMap<StavkaNarudzbine, StavkaNarudzbineDto>()
-                .ForMember(dest => dest.JeloIme, opt => opt.MapFrom(src => src.Jelo.Naziv));
+            //CreateMap<StavkaNarudzbine, StavkaNarudzbineDto>()
+            //    .ForMember(dest => dest.JeloIme, opt => opt.MapFrom(src => src.Jelo.Naziv));
 
 
             CreateMap<NarudzbinaDto, Narudzbina>();
@@ -36,7 +42,7 @@ namespace DostavaHrane.Helper
 
             CreateMap<MusterijaIzmenaDto, Musterija>();
 
-            CreateMap<StavkaNarudzbineDto, StavkaNarudzbine>();
+            //CreateMap<StavkaNarudzbineDto, StavkaNarudzbine>();
 
             CreateMap<Adresa, AdresaDto>();
             CreateMap<AdresaDto, Adresa>();
