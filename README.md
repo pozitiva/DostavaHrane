@@ -1,6 +1,6 @@
 **DostavaHrane**
 
-This is the backend for a food delivery application, handling restaurant management, order processing, and data persistence.
+This is the backend for a food delivery application, handling restaurant management, order processing, and data persistence. The backend also features an admin panel for managing restaurant data and orders.
 
 **Demo**
 
