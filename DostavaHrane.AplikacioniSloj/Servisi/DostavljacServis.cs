@@ -1,8 +1,6 @@
 ﻿using DostavaHrane.AplikacioniSloj.Interfejsi;
-using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Interfejsi;
-
 
 namespace DostavaHrane.Servisi
 {
@@ -39,7 +37,9 @@ namespace DostavaHrane.Servisi
             return await uow.DostavljacRepozitorijum.VratiSlobodnogDostavljacaAsync();
         }
 
-
-
+        public async Task<IEnumerable<Dostavljac>> VratiSveDostavljaceAsync()
+        {
+            return await uow.DostavljacRepozitorijum.VratiSveAsync();
+        }
     }
 }

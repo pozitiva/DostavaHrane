@@ -13,7 +13,7 @@ namespace DostavaHrane.Servisi
 
         public NarudzbinaServis(IUnitOfWork unitOfWork, IDostavljacServis dostavljacServis)
         {
-           uow= unitOfWork;
+            uow = unitOfWork;
             _dostavljacServis = dostavljacServis;
         }
 
@@ -35,7 +35,7 @@ namespace DostavaHrane.Servisi
             return await uow.NarudzbinaRepozitorijum.VratiPoIdAsync(id);
         }
 
-      
+
         public async Task<IEnumerable<Narudzbina>> VratiSveNarudzbinePoRestoranu(int restoranId)
         {
             return await uow.NarudzbinaRepozitorijum.VratiSveNarudzbinePoRestoranuAsync(restoranId);
@@ -47,6 +47,15 @@ namespace DostavaHrane.Servisi
             Narudzbina narudzbina = await VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
 
             if (narudzbina == null) return false;
+            if (narudzbina.Status == "Dostavljeno")
+            {
+                return false;
+            }
+
+            if (narudzbinaDto.Status == "Dostavljeno" && narudzbina.Status != "Predato dostavljacu")
+            {
+                return false;
+            }
 
             narudzbina.Status = narudzbinaDto.Status;
 
@@ -60,12 +69,12 @@ namespace DostavaHrane.Servisi
                     return false;
                 }
 
-          
+
                 narudzbina.DostavljacId = dostavljac.Id;
                 dostavljac.Slobodan = false;
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
             }
-           
+
             if (narudzbina.Status == "Dostavljeno")
             {
 
@@ -80,7 +89,7 @@ namespace DostavaHrane.Servisi
                 dostavljac.BrojDostava++;
 
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
-               
+
             }
 
             await IzmeniNarudzbinuAsync(narudzbina);
