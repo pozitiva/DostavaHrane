@@ -42,6 +42,7 @@ namespace DostavaHrane.Servisi
             {
                 Ime = musterija.Ime,
                 Email = musterija.Email,
+                BrojTelefona = musterija.BrojTelefona,
                 SifraHash = passwordHash,
                 SifraSalt = passwordSalt,
                 TipKorisnika = "musterija"

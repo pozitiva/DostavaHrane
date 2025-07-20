@@ -51,9 +51,9 @@ namespace DostavaHrane.Repozitorijum
             .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Dostavljac>> VratiSveAsync()
+        public async Task<IEnumerable<Dostavljac>> VratiSveAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Dostavljaci.ToListAsync();
         }
     }
 }

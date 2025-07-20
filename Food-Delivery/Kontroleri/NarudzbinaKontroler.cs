@@ -10,7 +10,7 @@ namespace DostavaHrane.Kontroleri
     [Authorize]
     [Route("api/narudzbina")]
     [ApiController]
-    public class NarudzbinaKontroler:ControllerBase
+    public class NarudzbinaKontroler : ControllerBase
     {
         private readonly INarudzbinaServis _narudzbinaServis;
         private readonly IMapper _mapper;
@@ -19,21 +19,21 @@ namespace DostavaHrane.Kontroleri
         {
             _narudzbinaServis = narudzbinaServis;
             _mapper = mapper;
-           
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> KreirajNarudzbinu( KreiranjeNarudzbineDto narudzbinaDto)
+        public async Task<IActionResult> KreirajNarudzbinu(KreiranjeNarudzbineDto narudzbinaDto)
         {
-            var musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);  
+            var musterijaId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
             var narudzbina = new Narudzbina
             {
                 DatumNarudzbine = System.DateTime.Now,
                 StavkeNarudzbine = new List<StavkaNarudzbine>(),
                 AdresaId = narudzbinaDto.AdresaId,
-                MusterijaId= musterijaId,
-                RestoranId= narudzbinaDto.RestoranId,
+                MusterijaId = musterijaId,
+                RestoranId = narudzbinaDto.RestoranId,
             };
 
             decimal ukupnaCena = 0;
@@ -44,7 +44,7 @@ namespace DostavaHrane.Kontroleri
                 {
                     JeloId = stavkaDto.JeloId,
                     Kolicina = stavkaDto.Kolicina,
-                    Narudzbina = narudzbina 
+                    Narudzbina = narudzbina
                 };
 
                 narudzbina.StavkeNarudzbine.Add(stavkaNarudzbine);
@@ -64,14 +64,14 @@ namespace DostavaHrane.Kontroleri
         {
             int restoranId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
 
-            if(restoranId != narudzbinaDto.RestoranId)
+            if (restoranId != narudzbinaDto.RestoranId)
             {
                 return Unauthorized();
             }
 
             bool rezultat = await _narudzbinaServis.izmeniStatusNarudzbineAsync(narudzbinaDto);
 
-            return rezultat? Ok("Status narudžbine je uspešno izmenjen") : BadRequest("Neuspeh");
+            return rezultat ? Ok("Status narudžbine je uspešno izmenjen") : BadRequest("Neuspesna izmena statusa");
         }
 
 

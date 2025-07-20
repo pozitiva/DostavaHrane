@@ -1,5 +1,4 @@
-﻿using DostavaHrane.Dto;
-using DostavaHrane.Entiteti;
+﻿using DostavaHrane.Entiteti;
 
 namespace DostavaHrane.AplikacioniSloj.Interfejsi
 {
@@ -9,5 +8,6 @@ namespace DostavaHrane.AplikacioniSloj.Interfejsi
         Task<string> KreirajDostavljaca(Dostavljac dostavljacDto);
         Task<Dostavljac> VratiDostavljacaPoIdAsync(int? dostavljacId);
         Task<Dostavljac> VratiSlobodnogDostavljacaAsync();
+        Task<IEnumerable<Dostavljac>> VratiSveDostavljaceAsync();
     }
 }
