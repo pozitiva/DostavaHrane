@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DostavaHrane.AplikacioniSloj.Dto;
 using DostavaHrane.AplikacioniSloj.Interfejsi;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
@@ -74,6 +75,20 @@ namespace DostavaHrane.Kontroleri
             return rezultat ? Ok("Status narudžbine je uspešno izmenjen") : BadRequest("Neuspesna izmena statusa");
         }
 
+        [HttpPut("otkazi")] 
+        public async Task<IActionResult> OtkaziNarudzbinu([FromBody] OtkazivanjeNarudzbineDto narudzbina)
+        {
+            int korisnikId = Convert.ToInt32(User.Claims.ElementAt(0).Value);
+
+            bool rezultat = await _narudzbinaServis.otkaziNarudzbinuAsync(narudzbina, korisnikId);
+
+            if (rezultat)
+            {
+                return Ok("Narudžbina je uspešno otkazana.");
+            }
+
+            return BadRequest("Nije moguće otkazati narudžbinu.");
+        }
 
         [HttpGet]
         public async Task<IActionResult> VratiSveNarudzbineZaRestoran()

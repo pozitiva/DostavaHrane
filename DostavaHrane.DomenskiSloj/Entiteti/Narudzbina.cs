@@ -21,6 +21,7 @@ namespace DostavaHrane.Entiteti
         public int MusterijaId { get; set; }
         public ICollection<StavkaNarudzbine> StavkeNarudzbine { get; set; }
 
-
+        public DateTime? VremeDostave { get; set; }
+        public DateTime? VremeOtkazivanja { get; set; }
     }
 }

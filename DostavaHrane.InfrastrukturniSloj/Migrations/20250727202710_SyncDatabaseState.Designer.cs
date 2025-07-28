@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DostavaHrane.Migrations
+namespace DostavaHrane.InfrastrukturniSloj.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240908170219_tipKorisnika")]
-    partial class tipKorisnika
+    [Migration("20250727202710_SyncDatabaseState")]
+    partial class SyncDatabaseState
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -219,6 +219,10 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
+
+                    b.Property<string>("BrojTelefona")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Musterije", (string)null);
                 });

@@ -24,6 +24,6 @@ namespace DostavaHrane.Dto
 
         public ICollection<StavkaNarudzbineDto> StavkeNarudzbine { get; set; }
 
-
-        }
+        public DateTime? VremeDogadjaja { get; set; }
+    }
     }

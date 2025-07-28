@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DostavaHrane.Migrations
+namespace DostavaHrane.InfrastrukturniSloj.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240902105313_izmenaJela")]
-    partial class izmenaJela
+    [Migration("20250727202908_AddTimestampsToNarudzbina")]
+    partial class AddTimestampsToNarudzbina
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -74,6 +74,9 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Slobodan")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Dostavljaci");
@@ -94,6 +97,10 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Opis")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RestoranId")
                         .HasColumnType("int");
@@ -137,6 +144,10 @@ namespace DostavaHrane.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("TipKorisnika")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Korisnici", (string)null);
@@ -174,6 +185,12 @@ namespace DostavaHrane.Migrations
                     b.Property<decimal>("UkupnaCena")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("VremeDostave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("VremeOtkazivanja")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdresaId");
@@ -208,6 +225,10 @@ namespace DostavaHrane.Migrations
             modelBuilder.Entity("DostavaHrane.Entiteti.Musterija", b =>
                 {
                     b.HasBaseType("DostavaHrane.Entiteti.Korisnik");
+
+                    b.Property<string>("BrojTelefona")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Musterije", (string)null);
                 });

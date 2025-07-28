@@ -1,7 +1,9 @@
-﻿using DostavaHrane.AplikacioniSloj.Interfejsi;
+﻿using DostavaHrane.AplikacioniSloj.Dto;
+using DostavaHrane.AplikacioniSloj.Interfejsi;
 using DostavaHrane.Dto;
 using DostavaHrane.Entiteti;
 using DostavaHrane.Interfejsi;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace DostavaHrane.Servisi
@@ -44,55 +46,72 @@ namespace DostavaHrane.Servisi
 
         public async Task<bool> izmeniStatusNarudzbineAsync(NarudzbinaDto narudzbinaDto)
         {
-            Narudzbina narudzbina = await VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
+            Narudzbina narudzbinaIzBaze = await VratiNarudzbinuPoIdAsync(narudzbinaDto.Id);
 
-            if (narudzbina == null) return false;
-            if (narudzbina.Status == "Dostavljeno")
+            if (narudzbinaIzBaze == null) return false;
+            if (narudzbinaDto.Status == "Dostavljeno")
             {
-                return false;
+                if (narudzbinaIzBaze.Status == "Otkazano" && narudzbinaIzBaze.VremeOtkazivanja.HasValue)
+                {
+                    if (narudzbinaDto.VremeDogadjaja < narudzbinaIzBaze.VremeOtkazivanja.Value)
+                    {
+                        narudzbinaIzBaze.Status = "Dostavljeno";
+                        narudzbinaIzBaze.VremeDostave = narudzbinaDto.VremeDogadjaja;
+                    }
+                    else
+                    {
+                        throw new Exception("Konflikt: Nije moguće promeniti status jer je narudžbina već otkazana.");
+                    }
+                }
+                else if (narudzbinaIzBaze.Status != "Dostavljeno")
+                {
+                    narudzbinaIzBaze.Status = "Dostavljeno";
+                    narudzbinaIzBaze.VremeDostave = narudzbinaDto.VremeDogadjaja;
+                }
+            }
+            else
+            {
+                narudzbinaIzBaze.Status = narudzbinaDto.Status;
             }
 
-            if (narudzbinaDto.Status == "Dostavljeno" && narudzbina.Status != "Predato dostavljacu")
+            if (narudzbinaDto.Status == "Predato dostavljacu")
             {
-                return false;
-            }
-
-            narudzbina.Status = narudzbinaDto.Status;
-
-            if (narudzbina.Status == "Predato dostavljacu")
-            {
-
                 Dostavljac dostavljac = await _dostavljacServis.VratiSlobodnogDostavljacaAsync();
 
-                if (dostavljac == null)
-                {
-                    return false;
-                }
-
-
-                narudzbina.DostavljacId = dostavljac.Id;
+                if (dostavljac == null) return false;
+               
+                narudzbinaIzBaze.DostavljacId = dostavljac.Id;
                 dostavljac.Slobodan = false;
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
             }
 
-            if (narudzbina.Status == "Dostavljeno")
+            if (narudzbinaDto.Status == "Dostavljeno" && narudzbinaDto.DostavljacId.HasValue)
             {
+                Dostavljac dostavljac = await _dostavljacServis.VratiDostavljacaPoIdAsync(narudzbinaIzBaze.DostavljacId);
 
-                Dostavljac dostavljac = await _dostavljacServis.VratiDostavljacaPoIdAsync(narudzbina.DostavljacId);
-
-                if (dostavljac == null)
-                {
-                    return false;
-                }
+                if (dostavljac == null) return false;
 
                 dostavljac.Slobodan = true;
                 dostavljac.BrojDostava++;
-
                 await _dostavljacServis.AžurirajDostavljacaAsync(dostavljac);
-
             }
 
-            await IzmeniNarudzbinuAsync(narudzbina);
+            await IzmeniNarudzbinuAsync(narudzbinaIzBaze);
+            await uow.SaveChanges();
+            return true;
+        }
+
+        public async Task<bool> otkaziNarudzbinuAsync(OtkazivanjeNarudzbineDto narudzbinaDto, int korisnikId)
+        {
+            var narudzbinaIzBaze = await uow.NarudzbinaRepozitorijum.VratiPoIdAsync(narudzbinaDto.NarudzbinaId);
+
+            if (narudzbinaIzBaze == null || narudzbinaIzBaze.MusterijaId != korisnikId)  return false;
+  
+            if (narudzbinaIzBaze.Status == "Dostavljeno" || narudzbinaIzBaze.Status == "Otkazano")  return false;
+
+            narudzbinaIzBaze.Status = "Otkazano";
+            narudzbinaIzBaze.VremeOtkazivanja = narudzbinaDto.VremeDogadjaja;
+            await IzmeniNarudzbinuAsync(narudzbinaIzBaze);
             await uow.SaveChanges();
             return true;
         }
